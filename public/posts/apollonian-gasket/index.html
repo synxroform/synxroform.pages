@@ -1,0 +1,286 @@
+<html lang=ru>
+    <head>
+        <title> Apollonian Gasket </title>
+        <link rel="stylesheet" href="/css/page_style.css" />
+        <link rel="stylesheet" href="/css/article_style.css" />
+        <link rel="stylesheet" href="/css/picture_style.css" />
+        <link rel="stylesheet" href="/css/syntax.css" />
+        <link rel="stylesheet" href="/css/image_viewer.css" />
+    </head>
+
+    <body>
+        <div class="head_white_background"></div>
+        <div class="head_background"></div>
+        <div class="button_panel">
+            <a href="/index.html">
+                <img src="/images/home-icon-silhouette.svg" height=35px style="margin-right: 20px;"/>
+            </a>
+            <a href="http://github.com/synxroform/">
+                <img src="/images/GitHub_alt-512.png" height=40px/>
+            </a>
+
+        </div>
+
+            
+            <a href="/posts/go-with-reflection/">
+                <svg class="arrow_back" viewBox="0 0 477.175 477.175">
+                    <linearGradient id="lin_grad">
+                        <stop offset="0%" stop-color="#fff"></stop>
+                        <stop offset="100%" stop-color="#fff0"></stop>
+                    </linearGradient>
+                    <g>
+                        <path d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4c5.3-5.3,5.3-13.8,0-19.1L145.188,238.575z" fill="url(#lin_grad)"></path>
+                    </g>
+                </svg>
+            </a>
+            
+            
+            
+            <a href="/posts/random-modules/">
+                <svg class="arrow_next" viewBox="0 0 477.175 477.175">
+                    <linearGradient id="lin_grad2">
+                        <stop offset="0%" stop-color="#fff0"></stop>
+                        <stop offset="100%" stop-color="#fff"></stop>
+                    </linearGradient>
+                    <g>
+                        <path d="M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5 c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z" fill="url(#lin_grad2)"></path>
+                    </g>
+                </svg>
+            </a>
+            
+
+        <div class="page_container">
+            <div class="page_head">
+                <a class="page_button" href="/posts"> список статей </a>
+                <span class="page_logo"> СИНХРОФОРМА </span>
+                <span class="page_date">25.10.2019</span>
+            </div>
+
+            <div class="page_id_container">
+              <span class="page_id"> A.05 </span>
+            </div>
+            <div class="big_arrow"></div>
+            <article class="page_text">
+
+<p>Рассматривая сложные узоры фрактальных форм, я всегда думаю о глубине мыслительного процесса предшествовавшего его открытию. В случае с рекурсивными функциями всё довольно просто, но вот фракталы в комплексной плоскости для меня представляются чем-то из параллельной вселенной. Несмотря на свою красоту, для большинства математиков фракталы являются не более чем игрушкой. Однако в своей практике я неоднократно сталкивался с ситуацией, когда фрактал помогал обнаруживать ошибки в программном обеспечении, длительное время остававшиеся незамеченными при использовании стандартных средств тестирования. Так например я нашел случайно внесённое изменение в математическое ядро системы Csound, которое проходило все тесты и проявлялось только при вычислении фракталов с глубокой рекурсией. В системе Blackmagic Fusion я нашел искажения вносимые в линейный процесс обработки изображений в формате с плавающей точкой. Стандартные тесты не предполагали многократной записи файла с последующим считыванием. Отсутствие возможностей для реализации рекурсии побудили меня использовать файл в качестве буфера, но вместо ожидаемого фрактала я получил кашу из пикселей. Служба поддержки подтвердила, что это ошибка в системе, вот только исправить её не удаётся до сих пор. Фракталы имеют сложную природу, и несмотря на то, что ошибка в программном обеспечении выявлена, её локализация может стать неразрешимой задачей.</p>
+
+<p>В очередной раз, пытаясь построить фрактал в системе CATIA, я нашел ошибку геометрического ядра. Следует отметить, что решатель зависимостей разработанный отечественной компанией “Ледас” оказался очень выносливым. Ошибка возникла когда я попытался обойтись без решателя, используя средства Generative Shape Design.</p>
+
+<p>Завершив работу над библиотекой ShapeFactory, и проведя небольшое количество испытаний, я решил
+написать пример, демонстрирующий её применение. Мне хотелось, чего-нибудь, одновременно,
+красивого и простого. Поэтому я решил смоделировать сетку Аполлония — фрактал, строящийся по трём
+попарно касающимся окружностям. Тем более я уже программировал его для Grasshopper&rsquo;а.</p>
+
+<p><img src="/posts/images/apollonian-gasket/main-view.svg" width=100%></p>
+
+<p>Независимо от системы, алгоритм построения окружности касательной к трём другим, требует
+дополнительных стабилизирующих условий для выбора определённого решения из множества
+подходящих. К сожалению, в большинстве САПР систем нельзя выбирать решения исходя из
+свойств окружности, например, минимальная площадь или максимальный периметр. Как правило,
+пользователю разрешается вводить точку наиболее близкую к искомому решению. В качестве
+таких точек, я решил использовать центры треугольников, построенных на попарном пересечении
+окружностей (<em>синие треугольники на изображении выше</em>). По этой причине наш алгоритм принимает
+на вход не три окружности, как в классическом решении, а четыре - (a, b, c) и С0. В варианте для
+Grasshopper&rsquo;a программа выгладит следующим образом &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># tri это наши [a, b, c] в списке</span>
+
+<span class="k">def</span> <span class="nf">subdiv</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">stop</span><span class="p">):</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">]</span>
+    <span class="n">cntr</span> <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">ConstructPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">xsct</span> <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">CurveXCurve</span><span class="p">(</span><span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">cntr</span> <span class="o">=</span> <span class="n">cntr</span> <span class="o">+</span> <span class="n">gh</span><span class="o">.</span><span class="n">Division</span><span class="p">(</span><span class="n">xsct</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">CircleTanTanTan</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">cntr</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stop</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">subdiv</span><span class="p">(</span><span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="n">stop</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+
+<span class="n">subdiv</span><span class="p">(</span><span class="n">tri</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tri</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tri</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<span class="n">tri</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tri</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">subdiv</span><span class="p">(</span><span class="n">tri</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">tri</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">c0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></code></pre></div>
+<p>Что касается <em>CATIA</em>, то здесь дела обстоят немного сложнее. Дело в том, что среда эскиза, в которой
+мы будем выполнять построения, имеет немного другую логику. Изначально, геометрия строится без связей
+с окружением, задаются только внутренние свойства, помогающие решателю в определении результата.
+Конкретные отношения между элементами добавляются последующими вызовами функций. Если проводить
+аналогию с языками программирования, то &ldquo;решатель&rdquo; можно назвать декларативным, в то время как
+Grasshopper будет функциональным. Для ручного ввода, декларативность является наиболее оптимальным
+решением, в то время как функциональный подход больше пригоден для алгоритмического использования.
+Хотя есть системы - T-flex например, в которых эскизные среды реализованы с использованием
+функциональной логики. Но несмотря на это, средства выделения контура в них, совершенно не предназначены
+для процедурного применения.</p>
+
+<p>Ещё проблем добавляет склонность решателя, из множества результатов выбирать наиболее бредовые.</p>
+
+<p><img src="/posts/images/apollonian-gasket/solver-errors.svg" width=100%></p>
+
+<p>Так, вместо <strong>d</strong> касательной <strong>abc</strong>, он обязательно выберет <strong>c = d</strong>. Именно поэтому,
+корректное начальное размещение объектов для нас является необходимым. В случае удачного
+решения, стабильность полностью определённого эскиза гарантируется.</p>
+
+<p>Приступим к рассмотрению алгоритма. Для начала подключимся к работающей <em>CATIA</em>, с активным документом.
+Создадим геометрическое множество, плюс несколько глобальных переменных&hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">using</span> <span class="n">ShapeFactory</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">dispatch</span><span class="p">(</span><span class="s">&#34;CATIA.Application&#34;</span><span class="p">)</span>
+<span class="n">prt</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">ActiveDocument</span><span class="o">.</span><span class="n">Part</span>
+
+
+<span class="n">gst</span> <span class="o">=</span> <span class="n">prt</span><span class="o">.</span><span class="n">HybridBodies</span><span class="o">.</span><span class="n">Add</span><span class="p">()</span>
+<span class="n">gst</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="s">&#34;Output&#34;</span>
+
+<span class="n">xy</span> <span class="o">=</span> <span class="n">prt</span><span class="o">.</span><span class="n">FindObjectByName</span><span class="p">(</span><span class="s">&#34;xy plane&#34;</span><span class="p">)</span>
+
+<span class="n">sk1</span> <span class="o">=</span> <span class="n">gst</span><span class="o">.</span><span class="n">HybridSketches</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">xy</span><span class="p">)</span>
+<span class="n">f2d</span> <span class="o">=</span> <span class="n">sk1</span><span class="o">.</span><span class="n">OpenEdition</span><span class="p">()</span>
+<span class="n">con</span> <span class="o">=</span> <span class="n">sk1</span><span class="o">.</span><span class="n">Constraints</span></code></pre></div>
+<p>Как мы уже говорили, алгоритм принимает на вход одну описанную окружность - C0, и три вписанных, попарно
+касательных - abc. У окружностей должны быть погашены все степени свободы. Для этого большую окружность
+зацепим в нулевой точке, и зададим ей радиус. Фиксированная вертикальная ось необходима для стабилизации
+внутренней триады.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">base_circle</span><span class="p">(</span><span class="n">rad</span><span class="p">)</span>
+    <span class="n">pt0</span> <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreatePoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">AddMonoEltCst</span><span class="o">.</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pt0</span><span class="p">)</span>  <span class="c"># фиксация </span>
+
+    <span class="n">ax0</span> <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreateLine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rad</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">StartPoint</span> <span class="o">=</span> <span class="n">pt0</span>
+    <span class="n">ax0</span><span class="o">.</span><span class="n">Construction</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">AddMonoEltCst</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">ax0</span><span class="p">)</span> <span class="c"># вертикальное ограничение</span>
+
+    <span class="n">c0</span> <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreateClosedCircle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rad</span><span class="p">)</span>
+    <span class="n">c0</span><span class="o">.</span><span class="n">CenterPoint</span> <span class="o">=</span> <span class="n">pt0</span>
+    <span class="n">rad</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">AddMonoEltCst</span><span class="o">.</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="n">c0</span><span class="p">)</span>
+    <span class="n">rad</span><span class="o">.</span><span class="n">Dimension</span><span class="o">.</span><span class="n">ValuateFromString</span><span class="p">(</span><span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">rad</span><span class="p">)</span><span class="s">mm&#34;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">c0</span><span class="p">,</span> <span class="n">ax0</span>
+<span class="k">end</span></code></pre></div>
+<p>Внутренние окружности нужно ограничить некоторым радиусом для того, чтобы в ходе манипуляций он не
+стал нулевым. Вначале, мы связываем их между собой, затем отключаем ограничение по радиусу, и крепим
+к большому кругу. К сожалению, мы не можем сказать решателю, что окружности должны быть одинаковыми
+по радиусу. Как альтернативный вариант, можно закрепить их центры на некоторой вспомогательной окружности.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">base_triad</span><span class="p">(</span><span class="n">cc0</span><span class="p">,</span> <span class="n">ax0</span><span class="p">)</span>
+    
+    <span class="c"># вспомогательная окружность</span>
+    <span class="n">cx</span> <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreateClosedCircle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cc0</span><span class="o">.</span><span class="n">Radius</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">cx</span><span class="o">.</span><span class="n">CenterPoint</span> <span class="o">=</span> <span class="n">cc0</span><span class="o">.</span><span class="n">CenterPoint</span>
+    <span class="n">cx</span><span class="o">.</span><span class="n">Construction</span> <span class="o">=</span> <span class="kc">true</span>
+
+    <span class="c"># базовая триада</span>
+    <span class="n">tri</span> <span class="o">=</span> <span class="n">map</span><span class="p">((</span><span class="mi">2</span><span class="nb">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">:</span><span class="p">(</span><span class="mi">2</span><span class="nb">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">:</span><span class="mi">2</span><span class="nb">pi</span><span class="p">)</span> <span class="k">do</span> <span class="n">ang</span>
+        <span class="c"># центр окружности</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreatePoint</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">ang</span><span class="p">)</span> <span class="o">*</span> <span class="n">cx</span><span class="o">.</span><span class="n">Radius</span><span class="p">,</span> <span class="n">cos</span><span class="p">(</span><span class="n">ang</span><span class="p">)</span><span class="o">*</span><span class="n">cx</span><span class="o">.</span><span class="n">Radius</span><span class="p">)</span>
+        <span class="n">pt</span><span class="o">.</span><span class="n">Construction</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="c"># собственно окружность</span>
+        <span class="n">cc</span> <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreateClosedCircle</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">ang</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">ang</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cc</span><span class="o">.</span><span class="n">CenterPoint</span> <span class="o">=</span> <span class="n">pt</span>
+        <span class="n">rad</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">AddMonoEltCst</span><span class="o">.</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="n">cc</span><span class="p">)</span>  <span class="c"># временный радиус</span>
+        <span class="n">rad</span><span class="o">.</span><span class="n">Dimension</span><span class="o">.</span><span class="n">ValuateFromString</span><span class="p">(</span><span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">cc0</span><span class="o">.</span><span class="n">Radius</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="s">mm&#34;</span><span class="p">)</span>
+        <span class="n">cc</span> <span class="o">=&gt;</span> <span class="n">rad</span>
+    <span class="k">end</span>
+    
+    <span class="n">tri</span><span class="p">,</span> <span class="n">rad</span> <span class="o">=</span> <span class="n">first</span><span class="o">.</span><span class="p">(</span><span class="n">tri</span><span class="p">),</span> <span class="n">last</span><span class="o">.</span><span class="p">(</span><span class="n">tri</span><span class="p">)</span>
+
+    <span class="c"># крепим центры к вспомогательной окружности</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">AddBiEltCst</span><span class="o">.</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">getproperty</span><span class="o">.</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span> <span class="o">:</span><span class="n">CenterPoint</span><span class="p">),</span> <span class="n">cx</span><span class="p">)</span> 
+
+    <span class="c"># взаимное касание</span>
+    <span class="n">push!</span><span class="p">(</span><span class="n">tri</span><span class="p">,</span> <span class="n">tri</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">3</span>
+        <span class="n">con</span><span class="o">.</span><span class="n">AddBiEltCst</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">tri</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">tri</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">end</span>
+    
+    <span class="c"># фиксируем первую окружность на оси</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">AddBiEltCst</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">tri</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">CenterPoint</span><span class="p">,</span> <span class="n">ax0</span><span class="p">)</span>
+    <span class="n">map</span><span class="p">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">Deactivate</span><span class="p">(),</span> <span class="n">rad</span><span class="p">)</span> <span class="c"># отключаем радиусы</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">AddBiEltCst</span><span class="o">.</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">tri</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">cc0</span><span class="p">)</span> <span class="c"># задаём касание к большой окружности</span>
+
+    <span class="k">return</span> <span class="n">tri</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">end</span></code></pre></div>
+<p>Если измерять алгоритм управляющими конструкциями, а не количеством строк, то он достаточно простой.
+Для построения окружностей касательных к трём другим, я написал отдельную функцию, которая размещает
+их в центрах, упомянутых в начале статьи, треугольников.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">circle_tri</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">cntr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="c"># расчет геометрического центра</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">3</span>
+        <span class="n">pt</span>    <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreatePoint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">pc</span>    <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">AddBiEltCst</span><span class="o">.</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="p">(</span><span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">cntr</span> <span class="o">+=</span> <span class="n">pt</span><span class="o">.</span><span class="n">GetCoordinates</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])[</span><span class="mi">2</span><span class="p">]</span> <span class="o">./</span> <span class="mi">3</span>
+        <span class="n">map</span><span class="p">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">Deactivate</span><span class="p">(),</span> <span class="n">pc</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="c"># создание требуемой окружности</span>
+    <span class="n">cir</span> <span class="o">=</span> <span class="n">f2d</span><span class="o">.</span><span class="n">CreateClosedCircle</span><span class="p">(</span><span class="n">cntr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cntr</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="c"># без сортировки алгоритм не работает</span>
+    <span class="n">con</span><span class="o">.</span><span class="n">AddBiEltCst</span><span class="o">.</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">cir</span><span class="p">,</span> <span class="n">sort</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">],</span> <span class="n">by</span><span class="o">=</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">.</span><span class="n">Radius</span><span class="p">,</span> <span class="n">rev</span><span class="o">=</span><span class="kc">true</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">cir</span>
+<span class="k">end</span></code></pre></div>
+<p>Как и полагается, алгоритм построения фрактала в четыре раза короче, чем подготовка входных данных.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">subdivide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">stop</span><span class="p">)</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">circle_tri</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stop</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">3</span>
+            <span class="n">subdivide</span><span class="p">(</span><span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">,</span> <span class="n">stop</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">c0</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">base_circle</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">base_triad</span><span class="p">(</span><span class="n">c0</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
+<span class="n">subdivide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span> <span class="kp">in</span> <span class="mi">1</span><span class="o">:</span><span class="mi">3</span>
+    <span class="n">subdivide</span><span class="p">(</span><span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">loop</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">c0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">sk1</span><span class="o">.</span><span class="n">CloseEdition</span><span class="p">()</span>
+<span class="n">prt</span><span class="o">.</span><span class="n">Update</span><span class="p">()</span></code></pre></div>
+<p><img src="/posts/images/apollonian-gasket/3d-view.png" width=100%></p>
+
+<p>Результат работы программы с включенными ограничениями. Выглядит, конечно, всё это устрашающе, особенно
+если представить себе систему уравнений, с которой пытается справиться решатель в этот момент.</p>
+
+<blockquote>
+<p>Центральную триаду можно было построить проще. Для указания того, что радиусы окружностей
+должны быть равными, не накладывая при этом ограничение на сам радиус, необходимо размерное
+ограничение одной окружности определить как образец (Reference), радиусы других окружностей
+через формулы сделать равными образцу. Но на размере программы это упрощение никак не отразится.</p>
+</blockquote>
+
+<h1 id="здесь-появляется-ошибка">здесь появляется ошибка</h1>
+
+<p>Компонент HybridShapeCircleTritangent для стабилизации решения
+использует довольно хитрую схему. Вместо вспомогательной точки, пользователь должен вводить числа
+задающие условия касания к базовым окружностям. В основной среде этого нет, мы просто выбираем
+необходимый вариант. Но если мы используем API, то нам придётся вводить кучу мутных чисел.</p>
+
+<p><img src="/posts/images/apollonian-gasket/touch-variants.svg" width=100%></p>
+
+<p>Так вот, помимо того, что указанный компонент нестабилен по отношению к результату, он имеет
+зону в кторой построить окружность просто невозможно. К примеру, у Grasshopper&rsquo;a алгоритм
+сходится на всём фрактале.</p>
+
+<p><img src="/posts/images/apollonian-gasket/error-zone.svg" width=100%></p>
+
+<p>При относительно малом радиусе <strong>с</strong>, построить в зоне X окружность касательную <strong>abc</strong> нельзя. Обойти
+ошибку возможно, если разделить <strong>b</strong> на несколько частей. Но опять же, алгоритм при этом не
+стабилизируется и разрушается во время изменений вносимых в модель.</p>
+
+<p>Итак, мы выяснили, что фракталы позволяют открывать участки недоступные для стандартной логики. Как правило, программные комплексы ожидаю от пользователя типичного поведения, и иногда не совсем типичного. Некоторые системы, например такие как Grasshopper, наоборот, изначально были рассчитаны на сложную логику.<br />
+Программирование фракталов в таких системах, как правило не приводит к непредсказуемому поведению, что не может не способствовать увеличению числа замечательных математических объектов..</p>
+</article> 
+        </div>
+        <div class="footnote">
+            <p>
+                <span> synxroform :__zaika_denis / A.05 / 25.10.2019</span>
+            </p>
+        </div>
+        
+    </body>
+</html>

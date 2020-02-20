@@ -1,0 +1,318 @@
+<html lang=ru>
+    <head>
+        <title> Objects and Methods </title>
+        <link rel="stylesheet" href="/css/page_style.css" />
+        <link rel="stylesheet" href="/css/article_style.css" />
+        <link rel="stylesheet" href="/css/picture_style.css" />
+        <link rel="stylesheet" href="/css/syntax.css" />
+        <link rel="stylesheet" href="/css/image_viewer.css" />
+    </head>
+
+    <body>
+        <div class="head_white_background"></div>
+        <div class="head_background"></div>
+        <div class="button_panel">
+            <a href="/index.html">
+                <img src="/images/home-icon-silhouette.svg" height=35px style="margin-right: 20px;"/>
+            </a>
+            <a href="http://github.com/synxroform/">
+                <img src="/images/GitHub_alt-512.png" height=40px/>
+            </a>
+
+        </div>
+
+            
+            <a href="/posts/give-me-more/">
+                <svg class="arrow_back" viewBox="0 0 477.175 477.175">
+                    <linearGradient id="lin_grad">
+                        <stop offset="0%" stop-color="#fff"></stop>
+                        <stop offset="100%" stop-color="#fff0"></stop>
+                    </linearGradient>
+                    <g>
+                        <path d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4c5.3-5.3,5.3-13.8,0-19.1L145.188,238.575z" fill="url(#lin_grad)"></path>
+                    </g>
+                </svg>
+            </a>
+            
+            
+            
+            <a href="/posts/ju-grass-points/">
+                <svg class="arrow_next" viewBox="0 0 477.175 477.175">
+                    <linearGradient id="lin_grad2">
+                        <stop offset="0%" stop-color="#fff0"></stop>
+                        <stop offset="100%" stop-color="#fff"></stop>
+                    </linearGradient>
+                    <g>
+                        <path d="M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5 c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z" fill="url(#lin_grad2)"></path>
+                    </g>
+                </svg>
+            </a>
+            
+
+        <div class="page_container">
+            <div class="page_head">
+                <a class="page_button" href="/posts"> список статей </a>
+                <span class="page_logo"> СИНХРОФОРМА </span>
+                <span class="page_date">22.09.2019</span>
+            </div>
+
+            <div class="page_id_container">
+              <span class="page_id"> A.02 </span>
+            </div>
+            <div class="big_arrow"></div>
+            <article class="page_text">
+
+<p>Семейство императивных языков программирования демонстрирует удивительное многообразие. И хотя на первый взгляд
+может показаться, что различий между отдельными представителями не существует, разработчики новых языков всё же
+находят основания для того, чтобы называть свой продукт следующей ступенью в развитии семейства. Мы, в свою очередь,
+попробуем выделить рациональные основания такого многообразия, которые не всегда гарантируют расширение общей
+парадигмы, предлагая вместо этого субъективное ощущение упорядоченности.</p>
+
+<p>Валентин Фёдорович Турчин - разработчик языка Refal, в своих работах часто оперирует понятием метасистемного
+перехода - удобным инструментом для анализа развития кибернетических моделей, позволяющим определять необходимые условия для расширения базовой сущности. Но в
+контексте императивных языков программирования лучше воспользоваться упрощённой версией метасистемного перехода, а именно макро-подстановкой. Здесь стоит отметить,
+что я имею ввиду более развитые средства рефлексии, такие как макросы <em>Julia</em> или механизмы символьной подстановки <em>Mathematica</em>, нежели чем препроцессор <em>C</em>. И
+поскольку целью данной статьи является сравнение различных подходов к объектно-ориентированному программированию, то класс рассматриваемых языковых конструкций
+также будет ограничен.</p>
+
+<p>Началом системы координат в пространстве наших исследований положим язык <em>С</em> - один из простых, и в то же время выразительных языков программирования. Иногда
+именуемый макроассемблером, он прекрасно справляется с поставленной задачей, а именно абстракцией вычислительных ресурсов. Так как <em>С</em> является низкоуровневым,
+многие современные парадигмы конструирования программных комплексов реализуются в нём неоправданно сложно, что вынуждает обращаться к средствам макро-контроля,
+которые в свою очередь способствуют появлению новых языков в семействе. И хотя не все потомки являются синтаксическим расширением <em>C</em>, многие из них можно
+рассматривать как средства автоматизации, предназначенные для упрощения применения уже сложившихся практик. Так например компилятор языка <em>Go</em>, взял на себя
+функции управления многопоточностью, избавив программиста от лишних задач связанных с распределением ресурсов. Хотя и параллельные вычисления, и сборку мусора
+можно было реализовать средствами самого <em>С</em>, выглядело всё это некрасиво, и очень часто
+являлось источником ошибок трудных для выявления.</p>
+
+<p>Что касается объектов, то и здесь ситуация в основном сводится к стремлению избавить программиста от ввода лишних символов. Даже язык <em>С++</em> практически не добавил
+ничего нового - конструкторы, деструкторы и виртуальные классы
+существовали в языке <em>С</em> всё время (что может быть виртуальней *void), только они не были частью языка и не имели
+поддержки со стороны компилятора. Вообще, как мне кажется, язык <em>Go</em> гораздо ближе к <em>C</em> по духу чем <em>С++</em>. Хотя
+последние стандарты <em>С++</em> приятно удивляют своим стремлением следовать современным тенденциям.</p>
+
+<p>Для лучшего понимания свойств тех или иных синтаксических конструкций, мы будем вводить их постепенно, стараясь максимально избегать их использования. Иногда это
+может казаться странным, но только так можно показать, что
+в какой то момент исторического развития были альтернативные пути. А начнём мы с уточнения необходимости структурных
+типов данных.</p>
+
+<p>Представим некоторую двухмерную точку &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="n">point_x</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">point_y</span> <span class="o">=</span> <span class="mf">1.7</span><span class="p">;</span></code></pre></div>
+<p>но это только одна точка, если бы нам понадобилось множество то &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="n">point_x</span><span class="p">[</span><span class="n">n</span><span class="p">];</span> <span class="c1">// статический массив
+</span><span class="c1"></span><span class="kt">float</span> <span class="n">point_y</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+
+<span class="kt">float</span> <span class="o">*</span><span class="n">point_x</span><span class="p">;</span>  <span class="c1">// динамический массив 
+</span><span class="c1"></span><span class="kt">float</span> <span class="o">*</span><span class="n">point_y</span><span class="p">;</span></code></pre></div>
+<p>то есть мы уже можем вычислить одну NURBS или Bezier кривую. Если нужно рассчитать несколько объектов &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="o">**</span><span class="n">point_x</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">**</span><span class="n">point_y</span><span class="p">;</span></code></pre></div>
+<p>в принципе, этого достаточно для реализации какой нибудь программы позволяющей просматривать чертежи. Все кривые
+будут храниться в некотором глобальном массиве, плюс цепочка функций занимающаяся тесселяцией и отрисовкой на
+экране. Кстати программы для просмотра чертежей одни из самых древних и появились они задолго до объектно-ориентированного программирования. Но давайте разберёмся
+в том, какие факторы всё таки вынуждают нас переходить к использованию структурных типов данных.</p>
+
+<p>Например, есть некоторая функция plot(float *px, float *py) выполняющая отрисовку кривой Bezier на экране, для этого нам нужно суммировать все точки помноженные на
+базис. Если мы пользуемся не <em>Fortran</em> а <em>С</em>, то нам необходимо знать  количество точек кривой, для правильной работы суммирующего цикла. Если исключить
+использование NAN-терминированных последовательностей по аналогии со строками, то единственной возможностью для нас будет переопределение
+plot(float *px, float *py, int num) &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="o">**</span><span class="n">point_x</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">**</span><span class="n">point_y</span><span class="p">;</span>
+<span class="kt">int</span>  <span class="o">*</span><span class="n">point_num</span><span class="p">;</span>
+
+<span class="n">plot</span><span class="p">(</span><span class="n">point_x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">point_y</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">point_num</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span></code></pre></div>
+<p>даже большее количество атрибутов кривой вряд ли побудит нас к использованию структур, ведь всегда можно написать &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="o">**</span><span class="n">point_x</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">**</span><span class="n">point_y</span><span class="p">;</span>
+<span class="kt">int</span> <span class="o">**</span><span class="n">curve_attributes</span><span class="p">;</span>
+
+<span class="n">plot</span><span class="p">(</span><span class="n">point_x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">point_y</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">curve_attributes</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span></code></pre></div>
+<p>а имена атрибутов кодировать числовыми константами или перечислением. Как видим, есть класс программ для которых
+очень сложно обосновать необходимость использования составных типов. И если наши примеры игрушечные, то существуют
+целые расчетные комплексы подобные описанному в книге &ldquo;Computational Plasticity for Finite Elements&rdquo;, которые вообще
+не используют структурные типы данных. Вот только информация в такие системы поступает статически в виде файлов, что
+позволяет заранее выделить необходимое количество ресурсов. Постойте, а что если поставить условие динамического ввода
+информации, например пользователь рисует кривую на сенсорном экране точку за точкой. Тогда наше представление данных
+основанное на массивах оказывается неэффективным, ведь мы должны указывать точные объемы выделяемой памяти которые
+мы не можем знать заранее, а использование динамических структур данных таких как связанные списки будет способствовать
+нашему переходу к составным типам. Но нет, буфер ввода можно выделять больше необходимого объёма, а после копировать
+данные в массив соответствующего размера. Так что, лучше попробуем расширить многообразие представляемых объектов.
+Для этого можно взять гипотетическую функцию проецирующую трёхмерную кривую на поверхность.</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="o">*</span><span class="n">curve_point_x</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">*</span><span class="n">curve_point_y</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">*</span><span class="n">curve_point_z</span><span class="p">;</span>
+
+<span class="kt">float</span> <span class="o">*</span><span class="n">result_point_x</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">*</span><span class="n">result_point_y</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">*</span><span class="n">result_point_z</span><span class="p">;</span>
+
+<span class="kt">float</span> <span class="o">*</span><span class="n">surface_grid_x</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">*</span><span class="n">surface_grid_y</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">*</span><span class="n">surface_grid_z</span><span class="p">;</span>
+
+<span class="n">project</span><span class="p">(</span><span class="n">curve_point_x</span><span class="p">,</span> <span class="n">curve_point_y</span><span class="p">,</span> <span class="n">curve_point_z</span><span class="p">,</span> 
+        <span class="n">surface_point_x</span><span class="p">,</span> <span class="n">surface_point_y</span><span class="p">,</span> <span class="n">surface_point_z</span><span class="p">,</span> 
+        <span class="n">return_point_x</span><span class="p">,</span> <span class="n">return_point_y</span><span class="p">,</span> <span class="n">return_point_z</span><span class="p">);</span></code></pre></div>
+<p>Но даже в этом случае можно всё упростить объединив координаты в один массив&hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="o">**</span><span class="n">curve</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">**</span><span class="n">surface</span><span class="p">;</span>
+<span class="kt">float</span> <span class="o">**</span><span class="n">result</span><span class="p">;</span>
+
+<span class="n">project</span><span class="p">(</span><span class="n">curve</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span></code></pre></div>
+<p>также следует учесть то, что <em>С</em> в отличии от <em>Fortran</em> не знает размер динамических массивов и нам его нужно будет
+передавать в каждую функцию. Использование структур значительно упрощает передачу аргументов, особенно если
+передаваемые объекты являются большими блоками разнородных данных. А вот насчет представления точки как структуры я не уверен, поскольку в таком случае мы теряем возможность применения векторизованных операций. Например <em>Fortran</em> функция вычисляющая длину вектора &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-fortran" data-lang="fortran"><span class="k">function </span><span class="n">norm</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+    <span class="kt">real</span> <span class="kd">::</span> <span class="n">norm</span>
+    <span class="kt">real</span> <span class="kd">::</span> <span class="n">vector</span><span class="p">(:)</span>
+
+    <span class="n">norm</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">vector</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">end</span></code></pre></div>
+<p>может работать с вектором любой размерности, в то время как её структурная <em>С</em> версия &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">float</span> <span class="nf">norm</span><span class="p">(</span><span class="n">vector</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="p">.</span><span class="n">y</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="p">.</span><span class="n">z</span><span class="o">^</span><span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+<p>ограничена конкретной размерностью, хотя встречается повсеместно, особенно в языках не поддерживающих
+векторные операции. Тем не менее, несмотря на то, что такие классы как Point или Vector смотрятся отвратительно,
+в целом очень сложно обойтись без некоей абстракции способной объединить разнородные данные. Почти во всех языках
+программирования имеются такие средства, разница состоит только в том насколько глубоко они интегрированы в общую
+парадигму. Одной разновидностью такой интеграции являются объекты или классы, которые можно встретить в
+таких языках как <em>Java</em> и <em>С#</em>. В <em>Fortran</em> тоже имеются подобные механизмы вот только реализованы они гораздо
+лучше, например  &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-fortran" data-lang="fortran"><span class="k">type</span><span class="p">,</span> <span class="k">public</span> <span class="kd">::</span> <span class="n">colored_point</span>
+    <span class="kt">real</span>    <span class="kd">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
+    <span class="nb">int</span>     <span class="kd">::</span> <span class="n">id</span>
+    <span class="kt">real</span>    <span class="kd">::</span> <span class="n">hsv</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">end type</span></code></pre></div>
+<p>Тип colored_point представляет собой цветную точку обозначенную некоторым целочисленным идентификатором. Все типы
+интегрируются в языковую парадигму <em>Fortran</em> следующим образом &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-fortran" data-lang="fortran"><span class="k">type</span><span class="p">(</span><span class="n">colored_point</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="kd">::</span> <span class="n">many_points</span> <span class="c">! множество точек
+</span><span class="c"></span>
+<span class="o">//</span> <span class="err">знак</span> <span class="p">%</span> <span class="err">это</span> <span class="err">как</span> <span class="p">.</span> <span class="err">в</span> <span class="err">с#</span>
+
+<span class="k">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">many_points</span> <span class="p">%</span> <span class="n">id</span>   <span class="c">! выводит идентификаторы всех точек 
+</span><span class="c"></span><span class="n">many_points</span> <span class="p">%</span> <span class="n">hsv</span>    <span class="o">=</span> <span class="mf">0.5</span>  <span class="c">! запрещено !!! hsv не элементарный тип
+</span><span class="c"></span><span class="n">many_points</span> <span class="p">%</span> <span class="n">hsv</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c">! задаёт первый компонент цвета
+</span><span class="c"></span><span class="n">many_points</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">%</span> <span class="n">hsv</span> <span class="o">=</span> <span class="mf">0.3</span>  <span class="c">! задаёт цветовые компоненты первой точки
+</span><span class="c"></span><span class="n">many_points</span> <span class="p">%</span> <span class="n">brightness</span><span class="p">()</span>  <span class="c">! вычисляет яркость всех точек 
+</span><span class="c"></span><span class="k">end</span></code></pre></div>
+<p>Как мы видим разработчики <em>Fortran</em> постарались максимально встроить объекты в общую концепцию работы с массивами.
+Если бы они неосмысленно копировали то, что уже сделано в Java или С#, то основное преимущество языка было бы потеряно.
+В частности, операция many_points.brightness() утратила бы своё значение, так как объект массива не содержит метод brightness(). В этом отношении Фортран довольно
+прогрессивен, во многих других языках за исключением Python и Julia невозможно создавать контейнеры, которые являются векторизованными копиями содержащихся в них
+элементов. Объектность контейнеров, по типу того как она реализована в Java или С#, перекрывает возможность непосредственной работы с множеством данных, то есть
+для их обработки необходимо прибегать к таким конструкциям как foreach или map/reduce. В то же время, более продуманные языки дают возможность использовать
+конструкции типа sum(circles[circles.length() &gt; 5].area()) -
+сумма площадей всех окружностей чей периметр больше 5. Но для этого разработчикам языков необходимо быть
+программистами, а не маркетологами. Как я никогда не понимал зачем в фильме &ldquo;Парк Юрского Периода&rdquo; машины с резиновыми колёсами прикреплены к рельсам, точно так-же
+я не понимаю зачем разработчики таких языков как Java или C# прикрепили их к монолитным системам типов. Гораздо лучше было бы дать программистам возможность самим
+настраивать семантику связанных с объектами синтаксических структур.</p>
+
+<p>Итак, мы согласились, что составные типы облегчают жизнь программистам. Особенно когда они хорошо интегрированы в язык, что не всегда имеет место. Но как обстоят
+дела с другими концепциями без
+которых сегодня уже невозможно представить объектно-ориентированное программирование. Начнём с &ldquo;синтаксического сахара&rdquo;
+под названием методы. Многие исследователи полагают, что кроме загромождения блока данных, функции прилепленные
+к некоторому классу ничего не дают. От такого понимания методов отказались Go и Julia, а управление многообразием функций в них реализовано посредством модулей,
+что значительно удобнее классов. Например если объект array имеет
+связанный с ним медленный метод sort, то заменить его на более эффективный метод с тем же именем можно просто - подключив
+другой модуль переопределяющий функцию sort. Если вы не хотите перекрывать базовый метод, то имеется возможность переименовать новый метод с помощью директивы
+импорта import new_module.sort as quick_sort. Так получилось, что
+именно языки без модулей обладают самыми сложными системами типов, очевидно, пытаясь компенсировать недостаток
+функциональности.</p>
+
+<p>Рассмотрим простую конструкцию &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// связанный список
+</span><span class="c1"></span><span class="k">struct</span> <span class="n">list</span> <span class="p">{</span>
+    <span class="n">list</span> <span class="o">*</span><span class="n">prev</span><span class="p">;</span>
+    <span class="n">list</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// и некоторые методы 
+</span><span class="c1"></span>
+<span class="kt">void</span> <span class="nf">sort</span><span class="p">(</span><span class="n">list</span> <span class="n">l</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">append</span><span class="p">(</span><span class="n">list</span> <span class="n">l</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">d</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">extend</span><span class="p">(</span><span class="n">list</span> <span class="n">l1</span><span class="p">,</span> <span class="n">list</span> <span class="n">l2</span><span class="p">);</span>
+
+<span class="c1">// lst.append(some_data) это всего лишь append(lst, some_data)
+</span><span class="c1"></span>
+<span class="n">list</span> <span class="n">lst</span><span class="p">;</span>
+<span class="n">lst</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#34;hello world&#34;</span><span class="p">);</span></code></pre></div>
+<p>Для совершения такой подстановки, совсем не нужно было делать всё то, что было сделано в C++. Более
+сообразительные разработчики идут по пути применения так называемых интерфейсов - предопределённых методов
+задающих поведение объекта &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="n">list</span><span class="p">.</span><span class="n">length</span>         <span class="o">=&gt;</span> <span class="n">get</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="s">&#34;length&#34;</span><span class="p">);</span>
+<span class="n">list</span><span class="p">.</span><span class="n">length</span> <span class="o">=</span> <span class="mi">10</span>    <span class="o">=&gt;</span> <span class="n">set</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="s">&#34;length&#34;</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+<span class="n">list</span><span class="p">.</span><span class="n">hello</span><span class="p">(</span><span class="s">&#34;hi&#34;</span><span class="p">)</span>    <span class="o">=&gt;</span> <span class="n">cal</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="s">&#34;hello&#34;</span><span class="p">,</span> <span class="n">args</span><span class="p">...);</span>
+
+<span class="c1">// таким образом можно передавать сообщения содержимому списка
+</span><span class="c1"></span>
+<span class="n">list</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">10</span>    <span class="o">=&gt;</span> <span class="n">cal</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="s">&#34;+=&#34;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">=</span> <span class="n">map</span><span class="p">((</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">this</span><span class="p">.</span><span class="n">elements</span><span class="p">);</span>
+
+<span class="c1">// хотя у списка отсутствует свойство x, оно есть у содержащихся в нём элементов
+</span><span class="c1">// задание этого свойства у списка автоматически перенаправляется элементам.
+</span><span class="c1"></span><span class="o">//</span></code></pre></div>
+<p>Вообще, все тяжелые и раздутые языки стали популярными на волне бизнес-программирования,
+в те времена, когда в лексиконе разработчиков появились такие слова как менеджмент, инфраструктура, делегат,
+предприятие, транзакция, брокер, всё это требовалось для того чтобы доказать руководству что ты не просто
+программист, но ещё и талантливый менеджер способный занимать высокие должности в иерархии корпорации.
+Конечно, времена пейджеров и сотовых телефонов с большими антеннами давно прошли, но менталитет
+программиста-бизнесмена остаётся до сих пор, и чем проще возникающие задачи, тем больше на них навешивается
+бесполезных украшений, только лишь ради доказательства того, что их решение требует значительных инвестиций.
+И хотя бизнес для бизнеса продолжает приносить прибыль, многие компании начинают понимать, что исключительно
+менеджментом невозможно добиться прорывных технологий, более того, оторванные от конкретной области абстрактные
+теории управления предприятием очень часто являются причиной низкой эффективности.</p>
+
+<p>В заключение хочу отметить, что и методы и структуры являются очень хорошими инструментами, но только
+в том случае если они не идут вразрез основным концепциям языка программирования. Структуры должны
+оставаться чистыми данными, без лишних украшений. Методы должны находиться в модулях и связываться со
+структурами с помощью компилятора. А объектные модели должны создаваться с помощью специальных интерфейсов.
+Как видим, мы недалеко ушли от начальной точки, по крайней мере мы находимся к ней гораздо ближе чем
+специалисты по маркетинговым языкам программирования.</p>
+
+<h1 id="редакция">редакция</h1>
+
+<p>Так как я сейчас являюсь фанатом Julia, хочу напомнить, что несмотря на то, что язык официально
+не позиционируется как объектно ориентированный, привязка методов к структурам осуществляется через &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">mutable</span> <span class="k">struct</span> <span class="n">MyStruct</span>
+    <span class="n">id</span><span class="o">::</span><span class="kt">Int64</span>
+    <span class="n">name</span><span class="o">::</span><span class="n">String</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="n">display</span><span class="p">(</span><span class="n">this</span><span class="o">::</span><span class="n">MyStruct</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">&#34;=&gt; id:&#34;</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s">&#34; name:&#34;</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="n">merge</span><span class="p">(</span><span class="n">this</span><span class="o">::</span><span class="n">MyStruct</span><span class="p">,</span> <span class="n">other</span><span class="o">::</span><span class="n">MyStruct</span><span class="p">)</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">id</span> <span class="o">+=</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span>
+    <span class="n">this</span><span class="o">.</span><span class="n">name</span> <span class="o">*=</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">return</span> <span class="n">this</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="n">Base</span><span class="o">.</span><span class="n">getproperty</span><span class="p">(</span><span class="n">this</span><span class="o">::</span><span class="n">MyStruct</span><span class="p">,</span> <span class="n">name</span><span class="o">::</span><span class="kt">Symbol</span><span class="p">)</span>
+    <span class="k">try</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">eval</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">args</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="n">args</span><span class="o">...</span><span class="p">)</span>
+    <span class="k">catch</span> <span class="kt">UndefVarError</span>
+        <span class="k">return</span> <span class="n">Base</span><span class="o">.</span><span class="n">getfield</span><span class="p">(</span><span class="n">this</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">end</span> 
+<span class="k">end</span>
+
+<span class="c"># теперь можно использовать</span>
+
+<span class="n">m1</span> <span class="o">=</span> <span class="n">MyStruct</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="s">&#34;hello_&#34;</span><span class="p">)</span>
+<span class="n">m2</span> <span class="o">=</span> <span class="n">MyStruct</span><span class="p">(</span><span class="mi">456</span><span class="p">,</span> <span class="s">&#34;world&#34;</span><span class="p">)</span>
+
+<span class="n">m1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+<span class="n">m1</span><span class="o">.</span><span class="n">display</span><span class="p">()</span></code></pre></div>
+<p>И хотя С++ - моя первая любовь, в плане объектно-ориентированного программирования он далеко позади Julia.</p>
+</article> 
+        </div>
+        <div class="footnote">
+            <p>
+                <span> synxroform :__zaika_denis / A.02 / 22.09.2019</span>
+            </p>
+        </div>
+        
+    </body>
+</html>

@@ -1,0 +1,196 @@
+<html lang=ru>
+    <head>
+        <title> Go With Reflection </title>
+        <link rel="stylesheet" href="/css/page_style.css" />
+        <link rel="stylesheet" href="/css/article_style.css" />
+        <link rel="stylesheet" href="/css/picture_style.css" />
+        <link rel="stylesheet" href="/css/syntax.css" />
+        <link rel="stylesheet" href="/css/image_viewer.css" />
+    </head>
+
+    <body>
+        <div class="head_white_background"></div>
+        <div class="head_background"></div>
+        <div class="button_panel">
+            <a href="/index.html">
+                <img src="/images/home-icon-silhouette.svg" height=35px style="margin-right: 20px;"/>
+            </a>
+            <a href="http://github.com/synxroform/">
+                <img src="/images/GitHub_alt-512.png" height=40px/>
+            </a>
+
+        </div>
+
+            
+            <a href="/posts/ju-grass-points/">
+                <svg class="arrow_back" viewBox="0 0 477.175 477.175">
+                    <linearGradient id="lin_grad">
+                        <stop offset="0%" stop-color="#fff"></stop>
+                        <stop offset="100%" stop-color="#fff0"></stop>
+                    </linearGradient>
+                    <g>
+                        <path d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4c5.3-5.3,5.3-13.8,0-19.1L145.188,238.575z" fill="url(#lin_grad)"></path>
+                    </g>
+                </svg>
+            </a>
+            
+            
+            
+            <a href="/posts/apollonian-gasket/">
+                <svg class="arrow_next" viewBox="0 0 477.175 477.175">
+                    <linearGradient id="lin_grad2">
+                        <stop offset="0%" stop-color="#fff0"></stop>
+                        <stop offset="100%" stop-color="#fff"></stop>
+                    </linearGradient>
+                    <g>
+                        <path d="M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5 c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z" fill="url(#lin_grad2)"></path>
+                    </g>
+                </svg>
+            </a>
+            
+
+        <div class="page_container">
+            <div class="page_head">
+                <a class="page_button" href="/posts"> список статей </a>
+                <span class="page_logo"> СИНХРОФОРМА </span>
+                <span class="page_date">10.10.2019</span>
+            </div>
+
+            <div class="page_id_container">
+              <span class="page_id"> A.04 </span>
+            </div>
+            <div class="big_arrow"></div>
+            <article class="page_text"><p>Системы типов в таких языках как C/C++ основаны на структурном представлении объекта в памяти. В противоположность этому алгебраические системы типов основаны на операциях применяемых к конкретному объекту. Определение типа происходит в двух местах : во время объявления переменной, и в заголовке функции.
+Создавая новую переменную компилятор должен знать о структуре выделяемой памяти, но есть ли необходимость в информации о структуре объекта во время определения функции. Как показывает практика применения языков с алгебраической типизацией, такой необходимости нет. Осознавая ограниченность структурной типизации, разработчики C++ ввели концепцию шаблонов. Данный подход сложно рассматривать как органическое расширение языка, скорее всего шаблоны похожи на временную меру, которую применили за неимением лучших идей. К той же категории можно отнести и виртуальные функции. Вообще, языки программирования очень редко реализуют полную алгебру типов с соответствующими операциями, мне известны только Haskell, Julia и такие экзотические языки как Maude, Agda, Coq. Вариантом операции объединения в некоторых языках выступает понятие интерфейса, точнее оно является аналогом алгебраического типа, а операция наследования от интерфейса включает структурный тип во множество образуемое интерфейсом. В данной статье я рассмотрю реализацию обобщенного программирования в языке Go.
+По большей части я написал её для себя, чтобы зафиксировать те приятные ощущения которые возникли у меня после перехода с С++ на Go.</p>
+
+<p>Пару дней назад я взялся за доработку Product Manufacturing Information сервера написанного на Go. Несмотря на то, что я никогда
+раньше не программировал на этом языке, мне досталась часть отвечающая за взаимодействие с базой
+данных. Пользуясь предоставленной свободой, я решил выкинуть унаследованный Oracle, заменив его
+на Mongo. После анализа структуры данных стало понятно, что в принципе можно отбросить и без Mongo, перейдя
+на встроенную базу типа ключ-значение. Чтобы прочувствовать как на мой выбор отреагировали остальные,
+представьте себе человека, который на вопрос &ldquo;чай или кофе&rdquo;, отвечает - &ldquo;воду&rdquo;.С большими трудностями, но мне всё же удалось продавить эту идею.
+Своё решение я аргументировал тем, что база данных это единственная зависимость проекта, и отбросив её мы сможем построить минимальный
+docker образ на основе sсratch. Базы вроде Bolt, по своей структуре, отлично подходят для хранения сборок.
+Легко можно построить иерархию данных с различными правами доступа, скажем, неограниченные возможности работы с моделью для главного инженера,
+и локально изолированная деталь для рядового проектировщика. Вот только набор дополнительных возможностей у Bolt сильно ограничен. Определение структуры данных,
+сериализаця, фильтрация, индексирование - всем этим должен заниматься программист. Есть библиотеки типа Storm, но для моего
+случая они не подошли.</p>
+
+<p>Прежде чем приступать к разработке, было решено потренироваться на массивах. Я не стал тратить время
+на поиски готового алгоритма в стандартной библиотеке. Открыв текстовый редактор, и набрав немного кода,
+я с горечью осознал, что мне придётся писать абстрактный контейнер в статически типизированном языке
+без шаблонов. Возможно ли это - давайте разберёмся. Объявление функции, выполняющей фильтрацию на основе
+некоторого предиката выглядит примерно так&hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">data</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{},</span> <span class="nx">pred</span> <span class="kd">func</span><span class="p">(</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">bool</span><span class="p">)</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}</span></code></pre></div>
+<p>В реальном проекте такая схема не сработает, представьте &hellip;</p>
+
+<div class="marked">
+<div class="codemark">
+<span> main.go </span> 
+</div>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">test</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">x</span> <span class="p">&gt;</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+    <span class="nx">result</span> <span class="o">:=</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">test</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+<p></div></p>
+
+<p>Компиляция такого кода выдаст две ошибки. Первая - совершенно непонятная, о том что нельзя преобразовать
+тип []int в []interface{}, несмотря на то, что семантика подобной операции очевидна. Вторая - вполне
+ожидаемая, о невозможности преобразования func(int) bool в func(interface{}) bool, в противном случае
+произошло бы расширение области определения, что абсолютно некорректно.</p>
+
+<p>Также, мы не можем пользователя заставить писать &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">test</span><span class="p">(</span><span class="nx">x</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">x</span><span class="p">.(</span><span class="kt">int</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span>
+<span class="p">}</span> 
+
+<span class="nx">result</span> <span class="o">:=</span> <span class="nf">filter</span><span class="p">(</span><span class="nf">make_abstract</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">test</span><span class="p">)</span></code></pre></div>
+<p>Просто потому, что в нормальных языках всё иначе. Продолжая искать решение, я наткнулся на стандартный
+модуль reflect. При поверхностном изучении он кажется ориентированным на тех, кто пишет интерпретаторы
+для Go. Возможно это не то что нужно, но других вариантов нет. Поэтому рассмотрим его подробно.</p>
+
+<p>Познакомившись поближе с типом Value, я узнал в нём старый-добрый VARIANT хорошо известный всем, кто
+когда либо программировал COM. Давайте перестроим фильтр используя reflect&hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">data</span> <span class="kd">interface</span><span class="p">{},</span> <span class="nx">pred</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kd">interface</span><span class="p">{}</span></code></pre></div>
+<p>Как мы видим, теперь и данные и предикат представляются пустыми интерфейсами. Для работы с ними нужно
+использовать методы модуля reflect. Создадим вспомогательную функцию &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">UnaryFunction</span><span class="p">(</span><span class="nx">f</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">vf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">x</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span> <span class="p">{</span>
+		<span class="nx">arg</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">{</span><span class="nx">x</span><span class="p">}</span>
+		<span class="k">return</span> <span class="nx">vf</span><span class="p">.</span><span class="nf">Call</span><span class="p">(</span><span class="nx">arg</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>Эта функция принимает на вход любую другую, конвертирует её в Value и внедряет в более абстрактную.
+Мы будем использовать её в нашем фильтре &hellip;</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">vec</span> <span class="kd">interface</span><span class="p">{},</span> <span class="nx">f</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kd">interface</span><span class="p">{}</span> <span class="p">{</span>
+	<span class="nx">fun</span> <span class="o">:=</span> <span class="nf">UnaryFunction</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+	<span class="nx">val</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">vec</span><span class="p">)</span>
+	<span class="nx">ret</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">MakeSlice</span><span class="p">(</span><span class="nx">val</span><span class="p">.</span><span class="nf">Type</span><span class="p">(),</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Len</span><span class="p">(),</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Len</span><span class="p">())</span>
+	<span class="nx">cnt</span> <span class="o">:=</span> <span class="mi">0</span>
+	<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">n</span> <span class="p">&lt;</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Len</span><span class="p">();</span> <span class="nx">n</span><span class="o">++</span>  <span class="p">{</span>
+		<span class="nx">e</span> <span class="o">:=</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nf">fun</span><span class="p">(</span><span class="nx">e</span><span class="p">).</span><span class="nf">Bool</span><span class="p">()</span> <span class="p">{</span>
+			<span class="nx">ret</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="nx">cnt</span><span class="p">).</span><span class="nf">Set</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span>
+			<span class="nx">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">ret</span><span class="p">.</span><span class="nf">Slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">cnt</span><span class="p">).</span><span class="nf">Interface</span><span class="p">()</span>
+<span class="p">}</span></code></pre></div>
+<p>Теперь main.go должен отработать нормально. Несмотря на то, что interface{} не имеет методов, мы можем
+конвертировать его в динамическое представление и работать с ним, почти как с обычным типом данных, в
+последующем извлекая реальное значение. Разумеется это учебный пример, в реальности reflect.MakeSlice нужно
+заменить на list, а в коллекцию vec завернуть базу данных, но общий принцип работы с абстрактными объектами
+понятен, и он достаточно неплохой. Конечно, мы теряем статическую проверку типов, и получаем ошибки времени
+выполнения, но мы также получаем возможность создания гетерогенных коллекций наподобие тех, что можно встретить
+в динамических языках.</p>
+
+<p>В заключение приведу ещё пару методов: cast - аналог map (в языке go map зарезервирован), и update -
+inplace map.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">UnaryOperator</span><span class="p">(</span><span class="nx">f</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">))</span> <span class="p">{</span>
+	<span class="nx">vf</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">x</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">arg</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">{</span><span class="nx">x</span><span class="p">}</span>
+		<span class="nx">vf</span><span class="p">.</span><span class="nf">Call</span><span class="p">(</span><span class="nx">arg</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kd">func</span> <span class="nf">cast</span><span class="p">(</span><span class="nx">vec</span> <span class="kd">interface</span><span class="p">{},</span> <span class="nx">f</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kd">interface</span><span class="p">{}</span> <span class="p">{</span>
+	<span class="nx">fun</span> <span class="o">:=</span> <span class="nf">UnaryFunction</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+	<span class="nx">val</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">vec</span><span class="p">)</span>
+	<span class="nx">ret</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">MakeSlice</span><span class="p">(</span><span class="nx">val</span><span class="p">.</span><span class="nf">Type</span><span class="p">(),</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Len</span><span class="p">(),</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Len</span><span class="p">())</span>
+	<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">n</span> <span class="p">&lt;</span> <span class="nx">ret</span><span class="p">.</span><span class="nf">Len</span><span class="p">();</span> <span class="nx">n</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">elm</span> <span class="o">:=</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+		<span class="nx">ret</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nf">Set</span><span class="p">(</span><span class="nf">fun</span><span class="p">(</span><span class="nx">elm</span><span class="p">))</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">ret</span><span class="p">.</span><span class="nf">Interface</span><span class="p">()</span>
+<span class="p">}</span>
+
+
+<span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nx">vec</span> <span class="kd">interface</span><span class="p">{},</span> <span class="nx">f</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">{</span>
+	<span class="nx">fun</span> <span class="o">:=</span> <span class="nf">UnaryOperator</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+	<span class="nx">val</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="nx">vec</span><span class="p">)</span>
+	<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">n</span> <span class="p">&lt;</span> <span class="nx">val</span><span class="p">.</span><span class="nf">Len</span><span class="p">();</span> <span class="nx">n</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nf">fun</span><span class="p">(</span><span class="nx">val</span><span class="p">.</span><span class="nf">Index</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nf">Addr</span><span class="p">())</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p>Язык Go часто упрекают в отсутствии шаблонов, но как мы видим, и без них можно прекрасно работать с обобщенными алгоритмами.
+Также не стоит забывать, что разные языки по-разному реализуют концепцию шаблонов, сравните, к примеру, весь тот кошмар,
+который творится в С++, и удивительно стройную систему дженериков Julia. Кстати, обобщенные алгоритмы маршалинга в C++
+вообще не реализуются, именно из-за недостатка рефлексии. Поля JSON приходится вытаскивать вручную, хотя в Go всё это происходит автоматически.</p>
+</article> 
+        </div>
+        <div class="footnote">
+            <p>
+                <span> synxroform :__zaika_denis / A.04 / 10.10.2019</span>
+            </p>
+        </div>
+        
+    </body>
+</html>

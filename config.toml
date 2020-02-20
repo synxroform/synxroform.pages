@@ -1,0 +1,10 @@
+defaultContentLanguage = "ru"
+
+baseURL = "/"
+languageCode = "ru"
+title = "SYNXROFORM"
+copyright = "Zaika Denis"
+disableKinds = ["taxonomy", "taxonomyTerm"]
+
+pygmentsUseClasses = true
+pygmentsCodeFences = true

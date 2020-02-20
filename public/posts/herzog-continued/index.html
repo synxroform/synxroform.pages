@@ -1,0 +1,241 @@
+<html lang=ru>
+    <head>
+        <title> Herzog Continued </title>
+        <link rel="stylesheet" href="/css/page_style.css" />
+        <link rel="stylesheet" href="/css/article_style.css" />
+        <link rel="stylesheet" href="/css/picture_style.css" />
+        <link rel="stylesheet" href="/css/syntax.css" />
+        <link rel="stylesheet" href="/css/image_viewer.css" />
+    </head>
+
+    <body>
+        <div class="head_white_background"></div>
+        <div class="head_background"></div>
+        <div class="button_panel">
+            <a href="/index.html">
+                <img src="/images/home-icon-silhouette.svg" height=35px style="margin-right: 20px;"/>
+            </a>
+            <a href="http://github.com/synxroform/">
+                <img src="/images/GitHub_alt-512.png" height=40px/>
+            </a>
+
+        </div>
+
+            
+            <a href="/posts/random-modules/">
+                <svg class="arrow_back" viewBox="0 0 477.175 477.175">
+                    <linearGradient id="lin_grad">
+                        <stop offset="0%" stop-color="#fff"></stop>
+                        <stop offset="100%" stop-color="#fff0"></stop>
+                    </linearGradient>
+                    <g>
+                        <path d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4c5.3-5.3,5.3-13.8,0-19.1L145.188,238.575z" fill="url(#lin_grad)"></path>
+                    </g>
+                </svg>
+            </a>
+            
+            
+            
+
+        <div class="page_container">
+            <div class="page_head">
+                <a class="page_button" href="/posts"> список статей </a>
+                <span class="page_logo"> СИНХРОФОРМА </span>
+                <span class="page_date">14.11.2019</span>
+            </div>
+
+            <div class="page_id_container">
+              <span class="page_id"> A.07 </span>
+            </div>
+            <div class="big_arrow"></div>
+            <article class="page_text"><p>Некоторое время назад я публиковал видео в котором был подробно показан алгоритм построения
+фасада торгового центра Messe Basel от архитектурного бюро Herzog de Meuron. Данный алгоритм
+содержит несколько недостатков. Во первых, он использует функции из модуля ICEM, который в
+большинстве случаев недоступен архитектурным бюро, проектирующим в Digital Project вместо CATIA.
+Во вторых, метод построения волнообразных элементов, основанный на касательных к управляющей
+поверхности, в результате даёт криволинейные развёртки усложняющие раскрой материала.
+Новую версию алгоритма мы разберём на примере фасада лаборатории медицинского университета
+города Гронинген, спроектированного архитектурным бюро UNSTUDIO.</p>
+
+<div class="picture">
+    <img src="/posts/images/herzog-continued/groningen.jpg">
+</div>
+
+<p>Как уже было сказано, предыдущий алгоритм разделял большую поверхность на множество маленьких.
+В каждой, получившейся в результате деления, ячейке определялись касательные к поверхности,
+которые затем отклонялись на угол заданный двухмерной функцией.</p>
+
+<p><img src="/posts/images/herzog-continued/ribbon-mechanic.svg" width="100%"></p>
+
+<p>Для оптимального раскроя материала и обработки кромки металлических панелей необходимо,
+чтобы проекции волнообразных элементов были прямоугольными. Это означает, что угол
+раскрытия должен быть пропорционален длинам сегментов ломанной линии, построенной на поверхности.
+На рисунке ниже изображены проекции панелей расположенные вдоль линии стены. Фасад торгового центра
+Messe Basel тоже является достаточно прямолинейным, за исключением центрального атриума, это необходимо
+для упрощённого покрытия поверхности параллелепипедами. На данный момент я не пробовал работать с
+поверхностями двойной кривизны, но думаю что если допустить трапециевидную проекцию элементов, то ими
+можно будет покрыть относительно гладкую основу.</p>
+
+<p><img src="/posts/images/herzog-continued/ribbon-projections.svg" width="100%"></p>
+
+<p>Для начала подключимся к работающей CATIA.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">using</span> <span class="n">ShapeFactory</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">dispatch</span><span class="p">(</span><span class="s">&#34;CATIA.Application&#34;</span><span class="p">)</span>
+<span class="n">sel</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">ActiveDocument</span><span class="o">.</span><span class="n">Selection</span>
+<span class="n">prt</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">ActiveDocument</span><span class="o">.</span><span class="n">Part</span></code></pre></div>
+<p>Теперь нужно задать параметры нашего фасада.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">new_parameter</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">prt</span><span class="o">.</span><span class="n">Parameters</span><span class="o">.</span><span class="n">CreateDimension</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">ValuateFromString</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span>
+<span class="k">end</span>
+
+
+<span class="n">a0</span> <span class="o">=</span> <span class="n">new_parameter</span><span class="p">(</span><span class="s">&#34;from_angle&#34;</span><span class="p">,</span> <span class="s">&#34;ANGLE&#34;</span><span class="p">,</span> <span class="s">&#34;45deg&#34;</span><span class="p">)</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">new_parameter</span><span class="p">(</span><span class="s">&#34;to_angle&#34;</span><span class="p">,</span> <span class="s">&#34;ANGLE&#34;</span><span class="p">,</span> <span class="s">&#34;1deg&#34;</span><span class="p">)</span>
+<span class="n">rw</span> <span class="o">=</span> <span class="n">new_parameter</span><span class="p">(</span><span class="s">&#34;ribbon_width&#34;</span><span class="p">,</span> <span class="s">&#34;LENGTH&#34;</span><span class="p">,</span> <span class="s">&#34;300mm&#34;</span><span class="p">)</span>
+<span class="n">rh</span> <span class="o">=</span> <span class="n">new_parameter</span><span class="p">(</span><span class="s">&#34;ribbon_height&#34;</span><span class="p">,</span> <span class="s">&#34;LENGTH&#34;</span><span class="p">,</span> <span class="s">&#34;1000mm&#34;</span><span class="p">)</span>
+<span class="n">ri</span> <span class="o">=</span> <span class="n">new_parameter</span><span class="p">(</span><span class="s">&#34;ribbon_inset&#34;</span><span class="p">,</span> <span class="s">&#34;LENGTH&#34;</span><span class="p">,</span> <span class="s">&#34;50mm&#34;</span><span class="p">)</span>
+<span class="n">fi</span> <span class="o">=</span> <span class="n">new_parameter</span><span class="p">(</span><span class="s">&#34;flange_inset&#34;</span><span class="p">,</span> <span class="s">&#34;LENGTH&#34;</span><span class="p">,</span> <span class="s">&#34;20mm&#34;</span><span class="p">)</span>
+<span class="n">rn</span> <span class="o">=</span> <span class="mi">10</span></code></pre></div>
+<p>Также нам понадобится несколько вспомогательных направлений и плоскость XY.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">gst</span> <span class="o">=</span> <span class="n">prt</span><span class="o">.</span><span class="n">HybridBodies</span><span class="o">.</span><span class="n">Add</span><span class="p">()</span>
+<span class="n">gst</span><span class="o">.</span><span class="n">Name</span> <span class="o">=</span> <span class="s">&#34;Output&#34;</span>
+
+<span class="n">fac</span> <span class="o">=</span> <span class="n">prt</span><span class="o">.</span><span class="n">HybridShapeFactory</span>
+<span class="n">xyp</span> <span class="o">=</span> <span class="n">prt</span><span class="o">.</span><span class="n">FindObjectByName</span><span class="p">(</span><span class="s">&#34;xy plane&#34;</span><span class="p">)</span>
+
+<span class="n">ydr</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewDirectionByCoord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">zdr</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewDirectionByCoord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></code></pre></div>
+<p>В моей версии CATIA формулы не воспринимают полные имена параметров начинающиеся с Part, поэтому
+нам нужно будет обрезать первый компонент имени. Вот пара функций для поддержания чистоты кода.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">Base</span><span class="o">.</span><span class="n">repr</span><span class="p">(</span><span class="n">idsp</span><span class="o">::</span><span class="kt">Ptr</span><span class="p">{</span><span class="n">IDispatch</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">join</span><span class="p">(</span><span class="n">split</span><span class="p">(</span><span class="n">idsp</span><span class="o">.</span><span class="n">Name</span><span class="p">,</span> <span class="s">&#34;</span><span class="se">\\</span><span class="s">&#34;</span><span class="p">)[</span><span class="mi">2</span><span class="o">:</span><span class="k">end</span><span class="p">],</span> <span class="s">&#34;</span><span class="se">\\</span><span class="s">&#34;</span><span class="p">)</span>
+<span class="k">end</span>
+
+
+<span class="k">function</span> <span class="n">relate</span><span class="p">(</span><span class="n">idsp</span><span class="o">::</span><span class="kt">Ptr</span><span class="p">{</span><span class="n">IDispatch</span><span class="p">},</span> <span class="n">frm</span><span class="o">::</span><span class="n">String</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">idsp</span><span class="p">),</span> <span class="s">&#34;</span><span class="se">\\</span><span class="s">&#34;</span> <span class="o">=&gt;</span> <span class="s">&#34;_&#34;</span><span class="p">)</span>
+    <span class="n">prt</span><span class="o">.</span><span class="n">Relations</span><span class="o">.</span><span class="n">CreateFormula</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="n">idsp</span><span class="p">,</span> <span class="n">frm</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
+<p>Так как фасад является симметричным относительно угла здания, а динамика распространена в
+одном направлении, то нам достаточно будет построить только один интерполирующий ряд панелей.
+Для лучшего понимания программы я обозначил анатомию составляющих поверхностей.</p>
+
+<div class="picture">
+    <img src="/posts/images/herzog-continued/ribbon-anatomy.png">
+</div>
+
+<p>Волнообразный элемент (B - blend) строится касательно по тангенсу к поверхностям E1,E2, которые
+в свою очередь выдавлены из противоположных рёбер основного параллелепипеда. Фланец FLN проходит
+через точку PIN и обрезается охватывающей парой B. Для точной проработки деталей, можно заменить
+упрощенную конструкцию конкретной PowerCopy с включенными креплениями кромкой и стыками. Все что
+нужно подать на вход, это два противоположных ребра и среднюю плоскость. Итак, функция для построения
+изгиба.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">blend_surface</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">flip</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="nb">e</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewExtrude</span><span class="o">.</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="o">-</span><span class="n">flip</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">flip</span><span class="p">),</span> <span class="n">zdr</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewBlend</span><span class="p">()</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">Coupling</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">SetCurve</span><span class="o">.</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">SetSupport</span><span class="o">.</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">e</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">SetContinuity</span><span class="o">.</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">SetTransition</span><span class="o">.</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="p">(</span><span class="n">flip</span><span class="p">,</span> <span class="o">-</span><span class="n">flip</span><span class="p">))</span>
+    <span class="n">b</span><span class="o">.</span><span class="n">RuledDevelopableSurface</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="k">return</span> <span class="n">b</span>
+<span class="k">end</span></code></pre></div>
+<p>Цветной фланец, закрывающий просвет между изгибами, строится так.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">flange_surface</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">plane</span><span class="p">,</span> <span class="n">limit1</span><span class="p">,</span> <span class="n">limit2</span><span class="p">,</span> <span class="n">flip</span><span class="p">)</span>
+    <span class="n">pin</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewPointOnCurveFromDistance</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+    <span class="n">ppn</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewLineAngle</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">xyp</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+    <span class="n">relate</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">Ratio</span><span class="p">,</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">fi</span><span class="p">))</span><span class="s">&#34;</span><span class="p">)</span>
+    <span class="n">ext</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewExtrude</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">zdr</span><span class="p">)</span>
+    <span class="n">relate</span><span class="p">(</span><span class="n">ext</span><span class="o">.</span><span class="n">EndOffset</span><span class="p">,</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">rh</span><span class="p">))</span><span class="s"> * -</span><span class="si">$</span><span class="p">(</span><span class="n">flip</span><span class="p">)</span><span class="s">&#34;</span><span class="p">)</span>
+    <span class="n">fln</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewExtrude</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewDirection</span><span class="p">(</span><span class="n">ppn</span><span class="p">))</span>
+    <span class="n">fln</span><span class="o">.</span><span class="n">SecondLimitType</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">fln</span><span class="o">.</span><span class="n">SecondUptoElement</span> <span class="o">=</span> <span class="n">plane</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewHybridSplit</span><span class="p">(</span><span class="n">fln</span><span class="p">,</span> <span class="n">limit1</span><span class="p">,</span> <span class="n">flip</span><span class="p">)</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewHybridSplit</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">limit2</span><span class="p">,</span> <span class="n">flip</span><span class="p">)</span>
+    <span class="n">gst</span><span class="o">.</span><span class="n">AppendHybridShape</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+    <span class="n">sel</span><span class="o">.</span><span class="n">Add</span><span class="o">.</span><span class="p">((</span><span class="n">fln</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="n">ppn</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">edges</span><span class="o">...</span><span class="p">))</span>
+<span class="k">end</span></code></pre></div>
+<p>Пара противоположных рёбер.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">main_edges</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+    <span class="n">edg</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewLineAngle</span><span class="o">.</span><span class="p">(</span><span class="n">ydr</span><span class="p">,</span> <span class="n">xyp</span><span class="p">,</span> <span class="n">pts</span><span class="p">[</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="p">],</span> <span class="kc">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="kc">true</span><span class="p">))</span>
+    <span class="n">relate</span><span class="p">(</span><span class="n">edg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">EndOffset</span><span class="p">,</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">rw</span><span class="p">))</span><span class="s"> + </span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">ri</span><span class="p">))</span><span class="s">&#34;</span><span class="p">)</span>
+    <span class="n">relate</span><span class="p">(</span><span class="n">edg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Angle</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+    <span class="n">relate</span><span class="p">(</span><span class="n">edg</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">BeginOffset</span><span class="p">,</span> <span class="s">&#34;-</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">ri</span><span class="p">))</span><span class="s">&#34;</span><span class="p">)</span>
+    <span class="n">relate</span><span class="p">(</span><span class="n">edg</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">EndOffset</span><span class="p">,</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">rw</span><span class="p">))</span><span class="s">&#34;</span><span class="p">)</span>
+    <span class="n">relate</span><span class="p">(</span><span class="n">edg</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">Angle</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">edg</span>
+<span class="k">end</span></code></pre></div>
+<p>А теперь несколько комментариев к основной программе. Зависимости между геометрией и параметрами
+определяются с помощью формул. Формула CATIA это небольшое выражение написанное на ограниченном
+языке EKL (Engineering Knowledge Language). Значения переменных вычисленные в Julia программе
+встраиваются в формулу через оператор $(), в том числе и строковые имена параметров. Связь
+параметра с формулой задаётся через relate(parameter, formula). Четные и нечётные элементы фасада
+требуют небольших различий в своей обработке, за это отвечает переменная  sgn принимающая (1, -1)
+соответственно. Соберём всё в одну функцию.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">function</span> <span class="n">ribbons</span><span class="p">()</span>
+
+    <span class="n">px</span> <span class="o">=</span> <span class="p">[</span><span class="n">fac</span><span class="o">.</span><span class="n">AddNewPointCoord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">rn</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">pl</span> <span class="o">=</span> <span class="nb">nothing</span>
+    <span class="n">bl</span> <span class="o">=</span> <span class="nb">nothing</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="kp">in</span> <span class="mi">0</span><span class="o">:</span><span class="n">rn</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">ndt</span> <span class="o">=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">dt</span> 
+        <span class="n">sgn</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">ang</span> <span class="o">=</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">a1</span><span class="p">))</span><span class="s"> * </span><span class="si">$</span><span class="p">(</span><span class="n">ndt</span><span class="p">)</span><span class="s"> + </span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">a0</span><span class="p">))</span><span class="s"> * (1- </span><span class="si">$</span><span class="p">(</span><span class="n">ndt</span><span class="p">)</span><span class="s">)&#34;</span>
+        <span class="n">frm</span> <span class="o">=</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">rw</span><span class="p">))</span><span class="s">/cos(</span><span class="si">$</span><span class="p">(</span><span class="n">ang</span><span class="p">)</span><span class="s">)&#34;</span>
+        <span class="n">frm</span> <span class="o">=</span>  <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">frm</span> <span class="o">:</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">px</span><span class="p">[</span><span class="k">end</span><span class="p">]</span><span class="o">.</span><span class="n">Y</span><span class="p">))</span><span class="s"> + (</span><span class="si">$</span><span class="p">(</span><span class="n">frm</span><span class="p">)</span><span class="s">)&#34;</span>
+
+        <span class="n">push!</span><span class="p">(</span><span class="n">px</span><span class="p">,</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewPointCoord</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">relate</span><span class="p">(</span><span class="n">px</span><span class="p">[</span><span class="k">end</span><span class="p">]</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="s">&#34;</span><span class="si">$</span><span class="p">((</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span><span class="s"> * -</span><span class="si">$</span><span class="p">(</span><span class="n">repr</span><span class="p">(</span><span class="n">rh</span><span class="p">))</span><span class="s">&#34;</span><span class="p">)</span>
+        <span class="n">relate</span><span class="p">(</span><span class="n">px</span><span class="p">[</span><span class="k">end</span><span class="p">]</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">frm</span><span class="p">)</span>
+        <span class="n">gst</span><span class="o">.</span><span class="n">AppendHybridShape</span><span class="p">(</span><span class="n">px</span><span class="p">[</span><span class="k">end</span><span class="p">])</span>
+
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">main_edges</span><span class="p">(</span><span class="n">px</span><span class="p">[</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="p">],</span> <span class="n">ang</span><span class="p">)</span>
+        <span class="n">gst</span><span class="o">.</span><span class="n">AppendHybridShape</span><span class="o">.</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+
+        <span class="n">blend</span> <span class="o">=</span> <span class="n">blend_surface</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">sgn</span><span class="p">)</span>
+        <span class="n">gst</span><span class="o">.</span><span class="n">AppendHybridShape</span><span class="p">(</span><span class="n">blend</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pl</span> <span class="o">!=</span> <span class="nb">nothing</span>
+            <span class="n">flange_surface</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">pl</span><span class="p">,</span> <span class="n">bl</span><span class="p">,</span> <span class="n">blend</span><span class="p">,</span> <span class="n">sgn</span><span class="p">)</span>
+        <span class="k">end</span>
+
+        <span class="n">pl</span> <span class="o">=</span> <span class="n">fac</span><span class="o">.</span><span class="n">AddNewPlaneAngle</span><span class="p">(</span><span class="n">xyp</span><span class="p">,</span> <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">90</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="n">bl</span> <span class="o">=</span> <span class="n">blend</span>
+    <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+<p>Спрячем ненужные элементы и обновим дерево построений.</p>
+<div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">ribbons</span><span class="p">()</span>
+<span class="n">sel</span><span class="o">.</span><span class="n">VisProperties</span><span class="o">.</span><span class="n">SetShow</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">prt</span><span class="o">.</span><span class="n">Update</span><span class="p">()</span></code></pre></div>
+<p>Я обязательно попробую обобщить этот метод на произвольные поверхности. В случае успеха
+непременно напишу об этом интересную статью.</p>
+
+<div class="picture">
+    <img src="/posts/images/herzog-continued/main-view.png">
+</div>
+<div class="picture">
+    <img src="/posts/images/herzog-continued/main-viewport.png">
+</div>
+<div class="picture">
+    <img src="/posts/images/herzog-continued/main-viewport-wires-2.png">
+</div>
+<div class="picture">
+    <img src="/posts/images/herzog-continued/half-view.png">
+</div>
+</article> 
+        </div>
+        <div class="footnote">
+            <p>
+                <span> synxroform :__zaika_denis / A.07 / 14.11.2019</span>
+            </p>
+        </div>
+        
+    </body>
+</html>

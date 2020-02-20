@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title> synxroform magazine </title>
+
+        <meta name="post_md" postid="A." postdesc="void" link=""/>
+        
+        {{ range .Site.RegularPages }}
+        <meta   name="post_md" 
+                postid="{{ .Params.postid }}" 
+                title="{{ .Title }}" 
+                date="{{ .PublishDate.Format `02.01.2006` }}" 
+                postdesc="{{ .Params.postdesc }}" 
+                link="{{ .Permalink }}"/>
+        {{ end }}
+        
+        <link rel="stylesheet" href="/css/selector_style.css"/>
+    </head>
+    <body>
+        <div class="postlist_page">
+            
+            <div class="page_menu">
+                <div class="page_logo"> СИНХРОФОРМА </div>
+                <div class="page_id">
+                    <div id="page_id_lookout">
+                        <span> A.00 </span>
+                        <span> A.00 </span> 
+                    </div>
+                </div>
+                <div class="page_info" id="page_info">
+                    <div>void</div>
+                </div>
+            </div>
+
+            <div class="postlist_frame">
+                <div class="postlist" id="postlist"></div>
+            </div>
+
+            <div id="cell_template" style="display:none">
+                <a class="marker"><span></span></a>
+            </div> 
+
+            <div class="list_slider" id="slider">
+                <div class="list_slider_thumb" id="thumb"></div>
+            </div>
+
+        </div>
+    
+    </body>
+    <script src="/javascript/slider_logic.js"></script>
+</html>

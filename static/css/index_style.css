@@ -1,0 +1,131 @@
+@font-face {
+    font-family: "Exo2-Regular";
+    src: url("/fonts/Exo2-Regular.ttf")
+}
+
+body {
+    background: #eee;
+    padding: 0px;
+    margin: 0px;
+}
+
+.space {
+    height: 100px;
+}
+
+.page {
+    width: 100%;
+    background-image: url("/images/head_background.jpg");
+    background-attachment: fixed;
+}
+
+.row {
+    position: relative;
+    margin: auto;
+    width: 80%;
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+    font-family: "Exo2-Regular";
+    font-size: 18px;
+    text-indent: 0em;
+    text-align: justify;
+    text-justify: inter-character;
+    color: #555555; 
+    margin-bottom: 20px
+}
+
+.column_space {
+    flex: 2%
+}
+
+.big_letters {
+    font-family: "Exo2-Regular";
+    font-size: 30px;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    width: 80%;
+    margin: auto;
+    color: #555;
+}
+
+.simple_text {
+    margin: auto;
+    align-items: center;
+    width: 80%;
+    font-family: "Exo2-Regular";
+    font-size: 20px;
+}
+
+.bulleted_text {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 20px;
+    font-family: "Exo2-Regular";
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+.bullet {
+    width: 30px;
+    margin-right: 30px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.button {
+    margin:auto;
+    background: dodgerblue;
+    padding: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: "Exo2-Regular";
+    font-size: 20px;
+    color: white;
+    width: fit-content;
+    
+}
+
+.small_button {
+    margin-right: 20px;
+    background: #555;
+    border-radius: 10px;
+    padding: 5px;
+    font-family: "Exo2-Regular";
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    width: fit-content;
+}
+
+.mail {
+    margin:auto;
+    font-family: "Exo2-Regular";
+    font-size: 20px;
+    text-align: center;    
+}
+
+.button_panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    top: 0px;
+    padding-top: 20px;
+    padding-right: 50px;
+    right: 100px;
+}
+
+.button_panel img {
+    opacity: 50%;
+}
+
+.button_panel img:hover {
+    opacity: 100%;
+}

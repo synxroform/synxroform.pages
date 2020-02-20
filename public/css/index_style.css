@@ -16,6 +16,7 @@ body {
 .page {
     width: 100%;
     background-image: url("/images/head_background.jpg");
+    background-attachment: fixed;
 }
 
 .row {

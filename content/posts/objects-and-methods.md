@@ -4,10 +4,10 @@ title   : "Objects and Methods"
 author  : "__zaika_denis"
 date    : 2019-09-22T08:01:41+04:00
 draft   : false
-postid  : "A.02"
+postid  : "C.02"
 postdesc: "rationalization of methods"
 tags    : ["fortran", "julia", "c++"]
-
+thumb   : "/posts/objects-and-methods/thumb.jpg"
 ---
 
 Семейство императивных языков программирования демонстрирует удивительное многообразие. И хотя на первый взгляд

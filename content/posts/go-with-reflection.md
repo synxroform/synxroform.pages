@@ -4,10 +4,10 @@ title   : "Go With Reflection"
 author  : "__zaika_denis"
 date    : 2019-10-10T11:23:56+04:00
 draft   : false
-postid  : "A.04"
-postdesc: "abstract containers in go"
+postid  : "C.04"
+postdesc: "Аbstract containers in Go"
 tags    : ["go"]
-
+thumb   : "/posts/go-with-reflection/thumb.jpg"
 ---
 
 Системы типов в таких языках как C/C++ основаны на структурном представлении объекта в памяти. В противоположность этому алгебраические системы типов основаны на операциях применяемых к конкретному объекту. Определение типа происходит в двух местах : во время объявления переменной, и в заголовке функции.
@@ -39,8 +39,6 @@ func filter(data []interface{}, pred func(interface{}) bool) []interface{}
 
 В реальном проекте такая схема не сработает, представьте ...
 
-<div class="marked">
-{{% codemark "main.go" %}}
 
 ```go
 func test(x int) bool {
@@ -52,7 +50,6 @@ func main() {
     result := filter(data, test)
 }
 ``` 
-</div>
 
 Компиляция такого кода выдаст две ошибки. Первая - совершенно непонятная, о том что нельзя преобразовать
 тип []int в []interface{}, несмотря на то, что семантика подобной операции очевидна. Вторая - вполне 

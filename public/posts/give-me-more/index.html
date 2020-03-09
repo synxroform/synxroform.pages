@@ -1,54 +1,47 @@
-<html lang=ru>
-    <head>
-        <title> Give Me More </title>
-        <link rel="stylesheet" href="/css/page_style.css" />
-        <link rel="stylesheet" href="/css/article_style.css" />
-        <link rel="stylesheet" href="/css/picture_style.css" />
-        <link rel="stylesheet" href="/css/syntax.css" />
-        <link rel="stylesheet" href="/css/image_viewer.css" />
-    </head>
 
-    <body>
-        <div class="head_white_background"></div>
-        <div class="head_background"></div>
-        <div class="button_panel">
-            <a href="/index.html">
-                <img src="/images/home-icon-silhouette.svg" height=35px style="margin-right: 20px;"/>
-            </a>
-            <a href="http://github.com/synxroform/">
-                <img src="/images/GitHub_alt-512.png" height=40px/>
-            </a>
+<!DOCTYPE html>
 
-        </div>
 
-            
-            
-            
-            <a href="/posts/objects-and-methods/">
-                <svg class="arrow_next" viewBox="0 0 477.175 477.175">
-                    <linearGradient id="lin_grad2">
-                        <stop offset="0%" stop-color="#fff0"></stop>
-                        <stop offset="100%" stop-color="#fff"></stop>
-                    </linearGradient>
-                    <g>
-                        <path d="M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5 c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z" fill="url(#lin_grad2)"></path>
-                    </g>
-                </svg>
-            </a>
-            
 
-        <div class="page_container">
-            <div class="page_head">
-                <a class="page_button" href="/posts"> список статей </a>
-                <span class="page_logo"> СИНХРОФОРМА </span>
-                <span class="page_date">21.09.2019</span>
-            </div>
+<html lang="en"> 
+<head>
 
-            <div class="page_id_container">
-              <span class="page_id"> A.01 </span>
-            </div>
-            <div class="big_arrow"></div>
-            <article class="page_text">
+	
+	<meta charset="utf-8">
+	<title>synxroform</title>
+	<meta name="description" content=".">
+	<meta name="author" content="zaika denis">
+	
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<link rel="stylesheet" type="text/css" href="/css/syntax.css">
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,300' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Exo+2:300,400|Fira+Code&display=swap" rel="stylesheet">
+	
+	<link rel="shortcut icon" href="/images/favicon.ico">
+	<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+</head>
+
+<body>
+
+
+	
+	<div class="simple-menu">
+		<a class="button" href="/index.html">INDEX</a>
+		<a class="button" href="/about.html">ABOUT</a>
+	</div>	
+	<div class="synxroform-logo">
+				<img src="/images/synxroform_logo.svg" alt="" />
+	</div>
+	
+		<div class="article-container">
+					<div class="article">
+						<h4>A.01 // julia performance tricks</h4>
+						
 
 <p>Несмотря на то, что для сравнения производительности Julia и Fortran, было проведено достаточно тестов, многие программисты (в том числе и я), имеющие опыт работы с Fortran или Matlab, всё ещё пытаются понять парадигму Julia, которой нужно придерживаться для достижения максимальной производительности. Дело в том, что язык допускает различные стили программирования, но не все они являются оптимальными. В этой статье я расскажу, как я пытался программировать в стиле Numpy, а в результате выбрал стиль Fortran.</p>
 
@@ -166,13 +159,27 @@ sys     0m0.015s</p>
 <p>дальнейшие манипуляции могут выглядеть следующим образом &hellip;</p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">sum</span><span class="p">(</span><span class="n">uv_grid</span> <span class="o">.*</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> </code></pre></div>
 <p>В общем, при соблюдении простых правил сопоставления, скорость выполнения Julia может быть приближена к Fortran.</p>
-</article> 
-        </div>
-        <div class="footnote">
-            <p>
-                <span> synxroform :__zaika_denis / A.01 / 21.09.2019</span>
-            </p>
-        </div>
-        
-    </body>
+
+					</div>
+
+				<div class="clear"></div>
+		</div>
+
+
+
+
+	
+	<section class="footer">
+		<span>A.01 // julia performance tricks // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
+	</section>
+	<div class="simple-menu">
+		<a class="button" href="/index.html" style="background: rgb(144, 200, 252);">INDEX</a>
+		<a class="button" href="/about.html" style="background: #eee;">ABOUT</a>
+	</div>
+
+
+
+
+
+</body>
 </html>

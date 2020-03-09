@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+
+
+
+<html lang="en"> 
+<head>
+
+	
+	<meta charset="utf-8">
+	<title>synxroform</title>
+	<meta name="description" content=".">
+	<meta name="author" content="zaika denis">
+	
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<link rel="stylesheet" type="text/css" href="/css/syntax.css">
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,300' rel='stylesheet' type='text/css'>
+	<link href="https://fonts.googleapis.com/css?family=Exo+2:300,400|Fira+Code&display=swap" rel="stylesheet">
+	
+	<link rel="shortcut icon" href="/images/favicon.ico">
+	<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+</head>
+
+<body>
+
+
+	
+	<div class="simple-menu">
+		<a class="button" href="/index.html">INDEX</a>
+		<a class="button" href="/about.html">ABOUT</a>
+	</div>	
+	<div class="synxroform-logo">
+				<img src="/images/synxroform_logo.svg" alt="" />
+	</div>
+	
+		<div class="article-container">
+					<div class="article">
+						<h4>A.08 // random geodesic</h4>
+						<p>Ортогональный дизайн плотно укоренился во многих сферах человеческой жизни. Я думаю, не будет преувеличением сказать, что большинство людей, размышляя о доме своей мечты представляют его как совокупность ортогональных элементов. Такой выбор обусловлен отнюдь не эстетическими качествами прямоугольников и кубов. Заточенность производства конструктивных элементов на однообразные повторяющиеся операции, делает невозможным осуществление криволинейных архитектурных форм, по крайней мере в области типового строительства. Сложность инженерных расчетов и последующего контроля строительства оболочек двойной кривизны, также сильно ограничивают область применения данного типа конструкций. На фотографии ниже изображена инфраструктура федеральной разведывательной службы Германии.</p>
+
+<p><figure><img src="BND.jpg" alt=""></figure></p>
+
+<p>Но было время, когда молодые люди, получившие образование в престижных учебных заведениях, устремились навстречу любви и гармонии в домах сферической формы. Главными распространителями идеи жизни в геодезических куполах считаются студенты Black Mountain College, где кстати, преподавал Бакминстер Фуллер - не первооткрыватель, но очень важный человек в истории легковесных сферических конструкций. Именно он долгое время обладал монополией на строительство геодезических куполов. Хотя на частное строительство патентные ограничения не распространялись.</p>
+
+<p><figure><img src="old-dome.jpg" alt=""></figure></p>
+
+<p>Подготавливая материал для данной статьи, я наткнулся на информационный буклет в котором семейные пары и одинокие энтузиасты красочно рассказывают, как им хорошо живётся в таких домах. Что самое интересное, подборка материалов по геодезическим куполам также включала мнение некоторых из них после тридцати лет проживания под куполом. Все они описывают тот период, как самый худший в их жизни, в основном это связано с постоянными протечками купола и невозможностью применения адекватных утепляющих материалов. Ещё очень часто возникали проблемы с жилищными инспекциями. Тем не менее геодезические купола и сегодня используются для решения некоторых задач. Благодаря повышенной устойчивости к ветровым нагрузкам они прекрасно подходят в качестве укрывной конструкции, чему свидетельствует многолетнее противостояние Новороссийской РЛС на горе Колдун экстремальным погодным условиям в зимний период. Ещё одной отличительной особенностью куполов является тороидальное закручивание конвекционных потоков, что создаёт дополнительную теплоизоляцию. В связи с чем они всё чаще применяются для укрытия домов в полярных условиях. Ну и конечно, классическое применение геодезических куполов это садово-парковая архитектура. На фотографии ниже изображена РЛС на горе Колдун.</p>
+
+<p><figure><img src="Wizard.jpg" alt=""></figure></p>
+
+<p>Геометрия геодезического купола строится на основе регулярного многогранника, выбор которого зависит от многих параметров. Наиболее популярным решением является икосаэдр, среди всех многогранников он даёт наиболее регулярное распределение точек на сферической поверхности. Хотя есть ситуации, когда регулярность является негативным фактором, например в укрывных конструкциях РЛС
+периодическая сетка купола может вносить искажения в получаемый сигнал. Построения регулярных геодезических сеток достаточно подробно описаны во многих открытых источниках, в данной статье мы рассмотрим пример построения псевдо-регулярной сетки, возможной к применению в небольших РЛС. Расчёты мы будем выполнять в среде Grasshopper с использованием компонента Python.</p>
+
+<h1 id="построение">Построение.</h1>
+
+<p>Как я уже говорил, в качестве основания сферического многогранника мы возьмем икосаэдр. Все построения можно выполнить вручную непосредственно в Rhinoceros.
+Я не рекомендую использовать готовые решения, просто потому, что построение регулярных многогранников - довольно интересная и в то же время простая тема. Следует уточнить, что центр многогранника находится в нулевой точке.</p>
+
+<p><figure><img src="icosahedron-construction.jpg" alt=""></figure>
+<figure><img src="icosahedron-construction.jpg" alt=""></figure></p>
+
+<p>Теперь нужно выделить некоторую грань, её вершины лучше представлять как базовые векторы, интерполируя которые мы получаем начальное равномерное распределение точек. Вершины многогранника лежат на сфере некоторого радиуса,
+новые точки, также должны лежать на поверхности сферы. Для этого можно воспользоваться сферическими барицентрами, но так как в нашем случае количество вершин грани ограничено тремя, то можно воспользоваться попарной сферической интерполяцией. Если вам понадобится сферическая интерполяция грани с большим количеством вершин, знайте, такие методы существуют. Ссылку на их описание я приведу в конце статьи. На изображении ниже показана попарная сферическая интерполяция.</p>
+
+<p><figure><img src="interpolation-phases.svg" alt=""></figure></p>
+
+<p>Создадим компонент Python, принимающий на вход x, y, z - базовые векторы (вершины грани), n - количество делений. В редакторе компонента нужно ввести
+следующее.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="c1"># секция импорта</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">functools</span> <span class="kn">as</span> <span class="nn">ft</span>
+<span class="kn">import</span> <span class="nn">random</span> <span class="kn">as</span> <span class="nn">rnd</span>
+<span class="kn">import</span> <span class="nn">ghpythonlib.components</span> <span class="kn">as</span> <span class="nn">gh</span></code></pre></div>
+<p>Дальше нам понадобится несколько векторных операций.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">vec_op</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span> <span class="c1"># общий бинарный оператор</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">v1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">vec_add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span> <span class="c1"># сложение</span>
+    <span class="k">return</span> <span class="n">vec_op</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">vec_mul</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span> <span class="c1"># умножение</span>
+    <span class="k">return</span> <span class="n">vec_op</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">vec_div</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span> <span class="c1"># деление</span>
+    <span class="k">return</span> <span class="n">vec_op</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">vec_len</span><span class="p">(</span><span class="n">v</span><span class="p">):</span> <span class="c1"># длина вектора</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]))</span>
+
+<span class="k">def</span> <span class="nf">vec_dot</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span> <span class="c1"># скалярное произведение</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">a</span><span class="o">*</span><span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)])</span>
+
+<span class="k">def</span> <span class="nf">vec_angle</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span> <span class="c1"># угол между двумя векторами</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">acos</span><span class="p">(</span><span class="n">vec_dot</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">vec_len</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="o">*</span> <span class="n">vec_len</span><span class="p">(</span><span class="n">v2</span><span class="p">)))</span></code></pre></div>
+<p>Можно было воспользоваться решениями rhinoscript, но мне нужен угол в радианах.
+Далее идёт определение сферической интерполяции.</p>
+
+<p><span  class="math">\[slerp(v_{1},v_{2}; p) = \frac{sin((1-p)a)}{sin(a)}v_{1}+\frac{sin(pa)}{sin(a)}v_{2}\]</span></p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">slerp</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">==</span> <span class="n">v2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">v1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">vec_angle</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+        <span class="n">m1</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">m2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">vec_add</span><span class="p">(</span><span class="n">vec_mul</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">m1</span><span class="p">),</span> <span class="n">vec_mul</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">m2</span><span class="p">))</span></code></pre></div>
+<p><figure><img src="vector-layout.jpg" alt=""></figure></p>
+
+<p>Алгоритм построения сетки разбит на две фазы. Сначала мы строим треугольник из точек.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="c1"># в результате функция выдаёт что-то типа</span>
+<span class="c1"># [p8, p9]</span>
+<span class="c1"># [p5, p6, p7]</span>
+<span class="c1"># [p1, p2, p3, p4]</span>
+
+<span class="k">def</span> <span class="nf">tri_points</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="c1"># n - количество делений</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># первое изопараметрическое направление</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+        <span class="c1"># второе изопараметрическое направление</span>
+        <span class="c1"># каждый раз количество требуемых точек уменьшается на одну</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">k</span><span class="p">):</span>
+            <span class="n">dj</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># первая пара векторов</span>
+            <span class="n">s1</span> <span class="o">=</span> <span class="n">slerp</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+            <span class="n">s2</span> <span class="o">=</span> <span class="n">slerp</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+            <span class="c1"># искомая точка</span>
+            <span class="n">sx</span> <span class="o">=</span> <span class="n">slerp</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">dj</span> <span class="o">*</span> <span class="n">j</span><span class="p">)</span>
+            <span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sx</span><span class="p">)</span>
+    <span class="c1"># последняя сингулярная точка как частный случай</span>
+    <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">v3</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">points</span></code></pre></div>
+<p>Затем объединяем ряды точек в треугольники. Если вы когда нибудь программировали OpenGL, то у вас не должно возникнуть вопросов.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="c1"># функция смешивания треугольных рядов</span>
+<span class="c1"># tri_comb([1, 1, 1], [2, 2, 2, 2]) = [2, 1, 2, 1, 2, 1, 2]</span>
+<span class="k">def</span> <span class="nf">tri_comb</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)):</span>
+        <span class="k">yield</span> <span class="n">c</span><span class="p">[</span><span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">][</span><span class="nb">int</span><span class="p">((</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span>
+
+
+<span class="k">def</span> <span class="nf">tri_grid</span><span class="p">(</span><span class="n">pts</span><span class="p">):</span>
+    <span class="n">tris</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># проход по рядам точек</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># комбинируем два смежных ряда</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tri_comb</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">pts</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="c1"># просто представляем точку как кортеж</span>
+        <span class="n">gpts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="c1"># формируем треугольники простым сдвигом</span>
+            <span class="n">tris</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gpts</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">tris</span></code></pre></div>
+<p><figure><img src="even-tesselation.jpg" alt=""></figure></p>
+
+<p>Теперь нам нужно модифицировать tri_grid так, чтобы она параллельно формировала шестиугольники. Сделаем мы это на основе двухмерной индексации и волшебства модульной арифметики. Если вы не знакомы с модульной арифметикой я рекомендую начать с замечательных книг Годфри Харди.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">tri_grid</span><span class="p">(</span><span class="n">pts</span><span class="p">):</span>
+    <span class="n">hexa</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">free</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">idy</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tri_comb</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">pts</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">gpts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">c</span><span class="p">]</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">tri</span> <span class="o">=</span> <span class="n">gpts</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">hp</span> <span class="o">=</span> <span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span> <span class="o">%</span> <span class="mi">2</span><span class="p">))</span> <span class="o">%</span> <span class="mi">4</span>
+            <span class="k">if</span> <span class="n">hp</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">hexa</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">tri</span><span class="p">,</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">idy</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">free</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tri</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">hp</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">idy</span> <span class="o">=</span> <span class="n">idy</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">free</span><span class="p">,</span> <span class="n">merge_hexagons</span><span class="p">(</span><span class="n">hexa</span><span class="p">)</span></code></pre></div>
+<p><figure><img src="hexagonal-tesselation.jpg" alt=""></figure></p>
+
+<p>Для рандомизации шестиугольника нужно сдвинуть его центр к случайной точке выбранной на периферии. Выполнить это немного сложнее чем представить.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="c1"># так как наши шестиугольники это всего лишь индексы, </span>
+<span class="c1"># то нам необходимо преобразовать их в реальные группы треугольников</span>
+<span class="k">def</span> <span class="nf">merge_hexagons</span><span class="p">(</span><span class="nb">hex</span><span class="p">):</span>
+    <span class="nb">hex</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ph</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">hex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">ph</span><span class="p">:</span>
+             <span class="n">ret</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+            <span class="n">ret</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">ph</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">ret</span>
+
+<span class="c1"># декомпозиция точек на периферию и центр</span>
+<span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">h</span><span class="p">):</span>
+   <span class="n">cen</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ft</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">h</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="n">per</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">pt</span> <span class="k">for</span> <span class="n">tri</span> <span class="ow">in</span> <span class="n">h</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">tri</span> <span class="k">if</span> <span class="n">pt</span> <span class="o">!=</span> <span class="n">cen</span><span class="p">]))</span>
+   <span class="k">return</span>  <span class="n">cen</span><span class="p">,</span> <span class="n">per</span>
+
+<span class="c1"># функция замещающая вершину шестиугольника</span>
+<span class="k">def</span> <span class="nf">replace_center</span><span class="p">(</span><span class="nb">hex</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+    <span class="n">new_hex</span> <span class="o">=</span> <span class="nb">hex</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">hex</span><span class="p">)):</span>
+        <span class="nb">hex</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">new</span> <span class="k">if</span> <span class="n">pt</span> <span class="o">==</span> <span class="n">old</span> <span class="k">else</span> <span class="n">pt</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">hex</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span>
+
+<span class="c1"># рандомизация шестиугольников</span>
+<span class="k">def</span> <span class="nf">randomize_hexagons</span><span class="p">(</span><span class="nb">hex</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">hex</span><span class="p">:</span>
+        <span class="n">cen</span><span class="p">,</span> <span class="n">per</span> <span class="o">=</span> <span class="n">decompose</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">per</span><span class="p">)</span>
+        <span class="n">npt</span> <span class="o">=</span> <span class="n">slerp</span><span class="p">(</span><span class="n">cen</span><span class="p">,</span> <span class="n">vec</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gh</span><span class="o">.</span><span class="n">ConstructPoint</span><span class="p">(</span><span class="o">*</span><span class="n">npt</span><span class="p">))</span>
+        <span class="n">replace_center</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">npt</span><span class="p">)</span></code></pre></div>
+<p>Теперь собираем всё вместе.</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="c1"># треугольник из точек</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">tri_points</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># шестиугольники и остаточные треугольники</span>
+<span class="n">free</span><span class="p">,</span> <span class="n">hexagons</span> <span class="o">=</span> <span class="n">tri_grid</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+<span class="c1"># вносим случайные изменения</span>
+<span class="n">randomize_hexagons</span><span class="p">(</span><span class="n">hexagons</span><span class="p">)</span>
+
+<span class="c1"># Строим полигоны</span>
+<span class="k">for</span> <span class="nb">hex</span> <span class="ow">in</span> <span class="n">hexagons</span><span class="p">:</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">gh</span><span class="o">.</span><span class="n">PolyLine</span><span class="p">([</span><span class="n">gh</span><span class="o">.</span><span class="n">ConstructPoint</span><span class="p">(</span><span class="o">*</span><span class="n">pt</span><span class="p">)</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">],</span> <span class="bp">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">pts</span> <span class="ow">in</span> <span class="nb">hex</span><span class="p">])</span></code></pre></div>
+<p><figure><img src="random-tesselation.jpg" alt=""></figure></p>
+
+<p>Если мы имеем дело с плотными сетками, то данную процедуру можно запустить рекурсивно на нескольких уровнях деления. В результате чего мы получим более хаотичную структуру. Функцию рандомизации я зафиксировал на конкретном параметре. Таким образом каждый шестиугольник
+является повернутой копией другого. Это необходимо для минимизации затрат связанных с производством большого числа разнообразных элементов. Хотя в действительности всё зависит от инструментальных требований конкретного технологического процесса. Например, раскрой материала выполняемый с помощью ЧПУ не требует сопроводительных инструментов, поэтому типизация элементов для данного процесса не является существенной. В то время как формовочные процессы сильно зависят от затрат связанных с изготовлением пресс-форм, которые можно минимизировать посредством повторного использования. Геодезические купола формируются посредством раскроя. Исключением являются узловые элементы, но они, как правило, допускают большое число конфигураций. Так что, в современных условиях в проведении процедуры обширной оптимизации нет смысла. Ярким примером успешной работы с множеством разнотипных элементов является небоскрёб Aldar (фото внизу), при строительстве которого была применена технология QR-маркировки.</p>
+
+<p><figure><img src="Aldar.jpg" alt=""></figure></p>
+
+<p>В следующих статьях я расскажу о методах BIM детализации полученной геометрии.</p>
+
+<hr>
+
+<p><a href="http://domino.mpi-inf.mpg.de/intranet/ag4/ag4publ.nsf/AuthorEditorIndividualView/9144c5ff262d3f9cc12571be00348ddf/$FILE/paper.pdf?OpenElement">Spherical Barycentric Coordinates / Eurographics Symposium on Geometry Processing (2006)</a></p>
+
+					</div>
+
+				<div class="clear"></div>
+		</div>
+
+
+
+
+	
+	<section class="footer">
+		<span>A.08 // random geodesic // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
+	</section>
+	<div class="simple-menu">
+		<a class="button" href="/index.html" style="background: rgb(144, 200, 252);">INDEX</a>
+		<a class="button" href="/about.html" style="background: #eee;">ABOUT</a>
+	</div>
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" crossorigin="anonymous"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+</body>
+</html>

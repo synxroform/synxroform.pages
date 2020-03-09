@@ -1,13 +1,13 @@
 ---
 
-title   : "Ju-Grass Dictionary"
+title   : "J-Grass Points"
 author  : "__zaika_denis"
 date    : 2019-10-01T18:54:40+04:00
 draft   : false
-postid  : "A.03"
-postdesc: "grasshopper to julia translations"
+postid  : "G.03"
+postdesc: "Grasshopper to Julia translation"
 tags    : ["julia", "grasshopper"]
-
+thumb   : "/posts/ju-grass-points/thumb.jpg"
 ---
 
 Всё большую популярность в среде архитекторов и дизайнеров приобретают системы визуального программирования.
@@ -62,7 +62,7 @@ lambda/map/reduce из функционального программирова
 ---
 
 # Сетка из точек размером 100x100 в плоскости XY.
-{{% picture "/posts/images/ju-grass-points/points_grid.png" %}}
+![](points_grid.png)
 
 ```julia
 map(Iterators.product(0:100, 0:100)) do index
@@ -71,7 +71,7 @@ end
 ```
 ---
 # Набор случайных точек в плоскости XY.
-{{% picture "/posts/images/ju-grass-points/random_points.png" %}}
+![](random_points.png")
 
 ```julia
 rndgen() = rand(0:100, 50)
@@ -79,7 +79,7 @@ points = Point.(rndgen(), rndgen(), 0)
 ```
 ---
 # Точки равномерно расположенные на окружности.
-{{% picture "/posts/images/ju-grass-points/points_on_circle.png" %}}
+![](points_on_circle.png)
 
 ```julia
 range = 0:2pi/50:2pi
@@ -88,7 +88,7 @@ points = Point.(sin(range), cos(range), 0)
 ```
 ---
 # Прямоугольный треугольник из точек
-{{% picture "/posts/images/ju-grass-points/points_triangle.png" %}}
+![](points_triangle.png)
 
 ```julia
 points = map(1:50) do n
@@ -97,7 +97,7 @@ end
 ```
 ---
 # Случайное распределение множества точек на поверхности Sin(x)*Cos(y) ограниченное некоторым условием.
-{{% picture "/posts/images/ju-grass-points/points_by_treshold.png" %}}
+![](points_by_treshold.png)
 
 ```julia
 x, y, w = rand.([1, 1, 1] * 1000) * 10
@@ -107,7 +107,7 @@ points = Point.(x[p], y[p], z[p])
 ```
 ---
 # Десять ближайших точек к некоторой другой.
-{{% picture "/posts/images/ju-grass-points/points_n_closest.png" %}}
+![](points_n_closest.png)
 
 ```julia
 
@@ -118,7 +118,7 @@ selected = points[sorted[:,2]]
 ```
 ---
 # Округление координат.
-{{% picture "/posts/images/ju-grass-points/points_random_grid.png" %}}
+![](points_random_grid.png)
 
 ```julia
 points = reshape(rand(100), (50, 2))

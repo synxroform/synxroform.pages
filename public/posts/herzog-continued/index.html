@@ -6,6 +6,17 @@
 <html lang="en"> 
 <head>
 
+	        
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159137770-1"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+	
+				gtag('config', 'UA-159137770-1');
+			</script>
+
+
 	
 	<meta charset="utf-8">
 	<title>synxroform</title>
@@ -31,8 +42,8 @@
 
 	
 	<div class="simple-menu">
-		<a class="button" href="/index.html">INDEX</a>
-		<a class="button" href="/about.html">ABOUT</a>
+		<a class="button" href="/index.html#post-table">INDEX</a>
+		<a class="button" href="/about.html#mail">ABOUT</a>
 	</div>	
 	<div class="synxroform-logo">
 				<img src="/images/synxroform_logo.svg" alt="" />
@@ -40,7 +51,7 @@
 	
 		<div class="article-container">
 					<div class="article">
-						<h4>07 // groningen lab facade</h4>
+						<h4 id="post-head">A.07 // Groningen Laboratory facade</h4>
 						<p>Некоторое время назад я публиковал видео в котором был подробно показан алгоритм построения
 фасада торгового центра Messe Basel от архитектурного бюро Herzog de Meuron. Данный алгоритм
 содержит несколько недостатков. Во первых, он использует функции из модуля ICEM, который в
@@ -50,15 +61,13 @@
 Новую версию алгоритма мы разберём на примере фасада лаборатории медицинского университета
 города Гронинген, спроектированного архитектурным бюро UNSTUDIO.</p>
 
-<div class="picture">
-    <img src="/posts/images/herzog-continued/groningen.jpg">
-</div>
+<p><img src="groningen.jpg" alt="" /></p>
 
 <p>Как уже было сказано, предыдущий алгоритм разделял большую поверхность на множество маленьких.
 В каждой, получившейся в результате деления, ячейке определялись касательные к поверхности,
 которые затем отклонялись на угол заданный двухмерной функцией.</p>
 
-<p><img src="/posts/images/herzog-continued/ribbon-mechanic.svg" width="100%"></p>
+<p><img src="ribbon-mechanic.svg" alt="" /></p>
 
 <p>Для оптимального раскроя материала и обработки кромки металлических панелей необходимо,
 чтобы проекции волнообразных элементов были прямоугольными. Это означает, что угол
@@ -69,7 +78,7 @@ Messe Basel тоже является достаточно прямолиней�
 поверхностями двойной кривизны, но думаю что если допустить трапециевидную проекцию элементов, то ими
 можно будет покрыть относительно гладкую основу.</p>
 
-<p><img src="/posts/images/herzog-continued/ribbon-projections.svg" width="100%"></p>
+<p><img src="ribbon-projections.svg" alt="" /></p>
 
 <p>Для начала подключимся к работающей CATIA.</p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="k">using</span> <span class="n">ShapeFactory</span>
@@ -116,9 +125,7 @@ Messe Basel тоже является достаточно прямолиней�
 одном направлении, то нам достаточно будет построить только один интерполирующий ряд панелей.
 Для лучшего понимания программы я обозначил анатомию составляющих поверхностей.</p>
 
-<div class="picture">
-    <img src="/posts/images/herzog-continued/ribbon-anatomy.png">
-</div>
+<p><img src="ribbon-anatomy.jpg" alt="" /></p>
 
 <p>Волнообразный элемент (B - blend) строится касательно по тангенсу к поверхностям E1,E2, которые
 в свою очередь выдавлены из противоположных рёбер основного параллелепипеда. Фланец FLN проходит
@@ -210,18 +217,13 @@ Messe Basel тоже является достаточно прямолиней�
 <p>Я обязательно попробую обобщить этот метод на произвольные поверхности. В случае успеха
 непременно напишу об этом интересную статью.</p>
 
-<div class="picture">
-    <img src="/posts/images/herzog-continued/main-view.png">
-</div>
-<div class="picture">
-    <img src="/posts/images/herzog-continued/main-viewport.png">
-</div>
-<div class="picture">
-    <img src="/posts/images/herzog-continued/main-viewport-wires-2.png">
-</div>
-<div class="picture">
-    <img src="/posts/images/herzog-continued/half-view.png">
-</div>
+<p><img src="main-view.jpg" alt="" /></p>
+
+<p><img src="main-viewport.jpg" alt="" /></p>
+
+<p><img src="main-viewport-wires-2.jpg" alt="" /></p>
+
+<p><img src="half-view.jpg" alt="" /></p>
 
 					</div>
 
@@ -233,7 +235,7 @@ Messe Basel тоже является достаточно прямолиней�
 
 	
 	<section class="footer">
-		<span>07 // groningen lab facade // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
+		<span>A.07 // Groningen Laboratory facade // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
 	</section>
 	<div class="simple-menu">
 		<a class="button" href="/index.html" style="background: rgb(144, 200, 252);">INDEX</a>

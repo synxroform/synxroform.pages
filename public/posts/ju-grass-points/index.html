@@ -6,6 +6,17 @@
 <html lang="en"> 
 <head>
 
+	        
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159137770-1"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+	
+				gtag('config', 'UA-159137770-1');
+			</script>
+
+
 	
 	<meta charset="utf-8">
 	<title>synxroform</title>
@@ -31,8 +42,8 @@
 
 	
 	<div class="simple-menu">
-		<a class="button" href="/index.html">INDEX</a>
-		<a class="button" href="/about.html">ABOUT</a>
+		<a class="button" href="/index.html#post-table">INDEX</a>
+		<a class="button" href="/about.html#mail">ABOUT</a>
 	</div>	
 	<div class="synxroform-logo">
 				<img src="/images/synxroform_logo.svg" alt="" />
@@ -40,7 +51,7 @@
 	
 		<div class="article-container">
 					<div class="article">
-						<h4>A.03 // grasshopper to julia translations</h4>
+						<h4 id="post-head">G.03 // Grasshopper to Julia translation</h4>
 						
 
 <p>Всё большую популярность в среде архитекторов и дизайнеров приобретают системы визуального программирования.
@@ -96,9 +107,7 @@ lambda/map/reduce из функционального программирова
 
 <h1 id="сетка-из-точек-размером-100x100-в-плоскости-xy">Сетка из точек размером 100x100 в плоскости XY.</h1>
 
-<div class="picture">
-    <img src="/posts/images/ju-grass-points/points_grid.png">
-</div>
+<p><img src="points_grid.png" alt="" /></p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">map</span><span class="p">(</span><span class="n">Iterators</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="o">:</span><span class="mi">100</span><span class="p">))</span> <span class="k">do</span> <span class="n">index</span>
     <span class="n">Point</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">index</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">end</span></code></pre></div>
@@ -106,27 +115,21 @@ lambda/map/reduce из функционального программирова
 
 <h1 id="набор-случайных-точек-в-плоскости-xy">Набор случайных точек в плоскости XY.</h1>
 
-<div class="picture">
-    <img src="/posts/images/ju-grass-points/random_points.png">
-</div>
+<p><img src="random_points.png" alt="" /></p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">rndgen</span><span class="p">()</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 <span class="n">points</span> <span class="o">=</span> <span class="n">Point</span><span class="o">.</span><span class="p">(</span><span class="n">rndgen</span><span class="p">(),</span> <span class="n">rndgen</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span></code></pre></div>
 <hr />
 
 <h1 id="точки-равномерно-расположенные-на-окружности">Точки равномерно расположенные на окружности.</h1>
 
-<div class="picture">
-    <img src="/posts/images/ju-grass-points/points_on_circle.png">
-</div>
+<p><img src="points_on_circle.png" alt="" /></p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">range</span> <span class="o">=</span> <span class="mi">0</span><span class="o">:</span><span class="mi">2</span><span class="nb">pi</span><span class="o">/</span><span class="mi">50</span><span class="o">:</span><span class="mi">2</span><span class="nb">pi</span>
 <span class="n">points</span> <span class="o">=</span> <span class="n">Point</span><span class="o">.</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">range</span><span class="p">),</span> <span class="n">cos</span><span class="p">(</span><span class="n">range</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span></code></pre></div>
 <hr />
 
 <h1 id="прямоугольный-треугольник-из-точек">Прямоугольный треугольник из точек</h1>
 
-<div class="picture">
-    <img src="/posts/images/ju-grass-points/points_triangle.png">
-</div>
+<p><img src="points_triangle.png" alt="" /></p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">points</span> <span class="o">=</span> <span class="n">map</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="mi">50</span><span class="p">)</span> <span class="k">do</span> <span class="n">n</span>
     <span class="n">Point</span><span class="o">.</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">end</span></code></pre></div>
@@ -134,9 +137,7 @@ lambda/map/reduce из функционального программирова
 
 <h1 id="случайное-распределение-множества-точек-на-поверхности-sin-x-cos-y-ограниченное-некоторым-условием">Случайное распределение множества точек на поверхности Sin(x)*Cos(y) ограниченное некоторым условием.</h1>
 
-<div class="picture">
-    <img src="/posts/images/ju-grass-points/points_by_treshold.png">
-</div>
+<p><img src="points_by_treshold.png" alt="" /></p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span>
 <span class="n">z</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 <span class="n">p</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="n">w</span>
@@ -145,9 +146,7 @@ lambda/map/reduce из функционального программирова
 
 <h1 id="десять-ближайших-точек-к-некоторой-другой">Десять ближайших точек к некоторой другой.</h1>
 
-<div class="picture">
-    <img src="/posts/images/ju-grass-points/points_n_closest.png">
-</div>
+<p><img src="points_n_closest.png" alt="" /></p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">points</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">2000</span><span class="p">),</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="n">distances</span> <span class="o">=</span> <span class="n">sqrt</span><span class="o">.</span><span class="p">(</span><span class="n">sum</span><span class="p">((</span><span class="n">points</span> <span class="o">.-</span> <span class="n">points</span><span class="p">[[</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="mi">1000</span><span class="p">)],</span><span class="o">:</span><span class="p">])</span> <span class="o">.^</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">sorted</span> <span class="o">=</span> <span class="n">sortslices</span><span class="p">([</span><span class="n">distances</span> <span class="mi">1</span><span class="o">:</span><span class="mi">1000</span><span class="p">],</span> <span class="n">dims</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">x</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -156,9 +155,7 @@ lambda/map/reduce из функционального программирова
 
 <h1 id="округление-координат">Округление координат.</h1>
 
-<div class="picture">
-    <img src="/posts/images/ju-grass-points/points_random_grid.png">
-</div>
+<p><img src="points_random_grid.png" alt="" /></p>
 <div class="highlight"><pre class="chroma"><code class="language-julia" data-lang="julia"><span class="n">points</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="n">new_points</span> <span class="o">=</span> <span class="n">round</span><span class="o">.</span><span class="p">(</span><span class="n">points</span> <span class="o">.*</span> <span class="mi">5</span><span class="p">)</span> <span class="o">.*</span> <span class="mi">20</span></code></pre></div>
 <hr />
@@ -173,7 +170,7 @@ lambda/map/reduce из функционального программирова
 
 	
 	<section class="footer">
-		<span>A.03 // grasshopper to julia translations // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
+		<span>G.03 // Grasshopper to Julia translation // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
 	</section>
 	<div class="simple-menu">
 		<a class="button" href="/index.html" style="background: rgb(144, 200, 252);">INDEX</a>

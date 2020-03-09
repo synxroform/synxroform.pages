@@ -9,24 +9,49 @@ body {
 	display: block;
 	width: 100%;
 	margin: 0px;
-	background: rgb(144, 200, 252);
+	background: #a2c7ceff;
 }
 
 .synxroform-logo img {
 	width: 80%;
 	margin: 10%;
+	content: url(/images/synxroform_logo.svg)
+}
+
+@media only screen and (min-width: 1025px) {
+	.synxroform-logo {
+		background: #fff;
+	}
+
+	.synxroform-logo img {
+		width: 50%;
+		margin: 5%;
+		margin-left: 15%;
+		content: url(/images/synxroform_logo_mono.svg);
+	}	
 }
 
 .article-container {
 	padding: 10%;
 }
 
+@media only screen and (min-width: 1025px) {
+	.article-container {
+		width: 50%;
+		padding-left: 15%;
+	}
+}
 
 .article h1, h2, h3, h4 {
 	font-family: "Roboto Slab";
 	font-weight: 300;
 	font-size: 25px;
 	margin-bottom: 10%;
+}
+
+.article img {
+	margin: 0px;
+	width: 100%;
 }
 
 .article figure {
@@ -110,6 +135,14 @@ body {
 	margin: 20px
 }
 
+@media only screen and (min-width: 1025px) {
+	.post-table {
+		margin: auto;
+		margin-top: 50px;
+		width: 70%
+	}
+}
+
 .post-cell {
 	background: white;
 	list-style: none;
@@ -119,6 +152,8 @@ body {
 	margin-bottom: 30px;
 	padding-top: 10px;
 }
+
+
 
 .post-cell h1, h2, h3, h4 {
 	display: inline;
@@ -139,4 +174,5 @@ body {
 	margin-top: 20px;
 	width: 100%;
 }
+
 

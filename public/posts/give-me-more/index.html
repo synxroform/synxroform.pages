@@ -6,6 +6,17 @@
 <html lang="en"> 
 <head>
 
+	        
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159137770-1"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+	
+				gtag('config', 'UA-159137770-1');
+			</script>
+
+
 	
 	<meta charset="utf-8">
 	<title>synxroform</title>
@@ -31,8 +42,8 @@
 
 	
 	<div class="simple-menu">
-		<a class="button" href="/index.html">INDEX</a>
-		<a class="button" href="/about.html">ABOUT</a>
+		<a class="button" href="/index.html#post-table">INDEX</a>
+		<a class="button" href="/about.html#mail">ABOUT</a>
 	</div>	
 	<div class="synxroform-logo">
 				<img src="/images/synxroform_logo.svg" alt="" />
@@ -40,7 +51,7 @@
 	
 		<div class="article-container">
 					<div class="article">
-						<h4>A.01 // julia performance tricks</h4>
+						<h4 id="post-head">C.01 // julia performance tricks</h4>
 						
 
 <p>Несмотря на то, что для сравнения производительности Julia и Fortran, было проведено достаточно тестов, многие программисты (в том числе и я), имеющие опыт работы с Fortran или Matlab, всё ещё пытаются понять парадигму Julia, которой нужно придерживаться для достижения максимальной производительности. Дело в том, что язык допускает различные стили программирования, но не все они являются оптимальными. В этой статье я расскажу, как я пытался программировать в стиле Numpy, а в результате выбрал стиль Fortran.</p>
@@ -59,7 +70,7 @@
     <span class="n">x</span> <span class="o">.=</span> <span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">nv</span><span class="p">)</span> <span class="o">./</span> <span class="n">nv</span>   <span class="c"># присваиваем массиву линейный градиент </span>
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">rotl90</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># возвращаем градиент и его повёрнутую копию</span>
 <span class="k">end</span></code></pre></div>
-<p><img src="/posts/images/give-me-more/img_logic.png" width="100%"/></p>
+<p><img src="img_logic.png" alt="" /></p>
 
 <p>Теперь, что касается самой задачи, нам необходимо построить не расстояние до точки, а функцию
 от этого расстояния. В оригинале функция выглядит так &hellip;</p>
@@ -170,7 +181,7 @@ sys     0m0.015s</p>
 
 	
 	<section class="footer">
-		<span>A.01 // julia performance tricks // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
+		<span>C.01 // julia performance tricks // <span style="font-family: sans-serif; color: #aaa">by__zaika_denis</span> </h4>
 	</section>
 	<div class="simple-menu">
 		<a class="button" href="/index.html" style="background: rgb(144, 200, 252);">INDEX</a>
